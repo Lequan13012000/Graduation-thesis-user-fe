@@ -1,3 +1,6 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 @import url('./Bases/input.css');
 @import url('./Bases/button.css');
 * {
@@ -15,7 +18,7 @@
 }
 
 .fas {
-    color: #3DAA12;
+    color: #fff;
     cursor: pointer;
 }
 

@@ -1,6 +1,6 @@
 <template>
     <div class="top-navbar">
-        <router-link to="/content" class="top-navbar__item"
+        <!-- <router-link to="/content" class="top-navbar__item"
         data-aos="fade-left"
         data-aos-duration="1000">Trang chủ</router-link>
         <a href="#" class="top-navbar__item"
@@ -20,7 +20,7 @@
         data-aos-duration="2700">Chính sách</a>
         <a href="#" class="top-navbar__item"
         data-aos="fade-left"
-        data-aos-duration="3000">Câu hỏi thường gặp</a>
+        data-aos-duration="3000">Câu hỏi thường gặp</a> -->
     </div>
 </template>
 <script>
@@ -31,7 +31,6 @@ export default {
 <style scoped>
 .top-navbar{
     display: flex;
-    padding: 0 48px;
     justify-content: flex-start;
     align-items: center;
     gap: 4px;

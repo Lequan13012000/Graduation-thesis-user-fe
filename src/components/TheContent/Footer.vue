@@ -21,7 +21,7 @@
 <style scoped>
 .footer{
     display: flex;
-    padding: 12px 48px;
+    padding: 12px 0;
     gap: 24px;
     align-items: center;
     justify-content: space-between;
