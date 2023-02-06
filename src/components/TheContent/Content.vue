@@ -3,40 +3,41 @@
     <div
       class="flex flex-col main-content w-[1200px] m-auto relative min-h-[120px]"
     >
-      <div class="flex flex-row gap-x-2">
+      <div class="list-category flex flex-row gap-x-2">
         <NavBar @changeCategory="changeCategory"></NavBar>
         <carousel
-          per-page="1"
+          :per-page="1"
           :paginationEnabled="false"
-          autoplay="true"
-          autoplayTimeout="2000"
-          loop="true"
+          :autoplay="true"
+          :autoplayTimeout="5000"
+          :loop="true"
+          :speed="2000"
         >
           <slide>
             <img
               src="https://www.anlocviet.vn/thumb/930x495/1/upload/hinhanh/642029997375361.jpg"
               alt=""
-              class="h-[702px]"
+              class="h-[495px]"
           /></slide>
           <slide>
             <img
               src="https://www.anlocviet.vn/thumb/930x495/1/upload/hinhanh/0363251643821440.png"
               alt=""
-              class="h-[702px]"
+              class="h-[495px]"
             />
           </slide>
           <slide>
             <img
               src="https://www.anlocviet.vn/thumb/930x495/1/upload/hinhanh/642029997375361.jpg"
               alt=""
-              class="h-[702px]"
+              class="h-[495px]"
             />
           </slide>
           <slide>
             <img
               src="https://www.anlocviet.vn/thumb/930x495/1/upload/hinhanh/9469347715638350.jpg"
               alt=""
-              class="h-[702px]"
+              class="h-[495px]"
             />
           </slide>
         </carousel>
@@ -44,7 +45,7 @@
       <div class="view">
         <ListProduct
           ref="listProduct"
-          v-if="!isDetail"
+          v-if="!isDetail && showListProduct"
           :title="categoryName"
           :totalItems="totalItems"
           :items="items"
@@ -78,6 +79,7 @@ export default {
       categoryName: "",
       category: 1,
       totalItems: 0,
+      showListProduct: false,
     };
   },
   created() {
@@ -94,7 +96,7 @@ export default {
         })
         .then((res) => {
           this.items = res.data.data;
-          console.log(res.data);
+          this.showListProduct = true;
           this.totalItems = res.data.totalRecord;
         });
       await this.$axios
@@ -156,6 +158,18 @@ export default {
 .main-content {
   display: flex;
   gap: 12px;
+  margin: auto;
+}
+.list-category {
+  padding-bottom: 25px;
+  border-top: 3px solid #ef3073;
+  -moz-box-shadow: 0 0 5px 5px #dadada;
+  -webkit-box-shadow: 0 0 5px 5px #dadada;
+  box-shadow: 0 0 5px 5px #dadada;
+  margin-top: 15px;
+  background: #fff;
+  padding: 10px;
+  box-sizing: border-box;
 }
 .view {
   width: 100%;

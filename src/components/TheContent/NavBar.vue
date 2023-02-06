@@ -1,9 +1,9 @@
 <template>
   <div class="navbar">
-    <div class="navbar__title">
+    <!-- <div class="navbar__title">
       <i class="fas fa-bars"></i>
       <span style="font-size: 20px; font-weight: 500">DANH MỤC SẢN PHẨM</span>
-    </div>
+    </div> -->
     <div
       class="navbar__item"
       v-for="item in list"
@@ -35,12 +35,19 @@ export default {
 };
 </script>
 <style scoped>
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
 .navbar {
   min-width: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
   border: 1px solid #ccc;
   border-radius: 8px;
   background: #fff;
-  height: 100%;
+  height: 495px;
+  text-transform: uppercase;
 }
 .navbar__title {
   display: flex;
@@ -59,8 +66,10 @@ export default {
   border-top: 1px solid #ccc;
   transition: all linear 1s;
   cursor: pointer;
+  border-bottom: 1px dotted #c7c7c7;
 }
 .navbar__item:hover {
-  background: #eee;
+  background: #ef3073;
+  color: #fff;
 }
 </style>
