@@ -1,5 +1,5 @@
 <template>
-    <div class="footer">
+    <div class="footer w-[1200px] m-auto relative">
         <div class="footer__content">
             <img src="../../assets/image/logo.png" alt="">
         </div>
@@ -38,7 +38,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #3DAA12;
+    border: 1px solid #ef3073;
     border-radius: 4px;
 }
 </style>

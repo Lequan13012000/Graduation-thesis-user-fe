@@ -4,31 +4,34 @@
       {{ title }}
     </div>
     <div class="list-product-content">
-      <div class="category-description" v-if="description">
+      <!-- <div class="category-description" v-if="description">
         {{ description }}
-      </div>
+      </div> -->
       <div v-if="!items.length" class="no-data">
         Hiện tại chưa có sản phẩm để hiển thị
       </div>
-      <div class="flex">
-        <carousel
-          class="w-3/4"
-          :per-page="1"
-          :paginationEnabled="false"
-          :autoplay="false"
-          :autoplayTimeout="5000"
-          :loop="true"
-          :speed="2000"
-        >
-          <slide v-for="(itemGrid, index) in dataGrid" :key="index">
-            <div class="grid-card">
-              <div
-                v-for="(item, index) in itemGrid"
-                :key="index + 'name'"
-                class="card"
-              >
+      <!-- <div class="flex"> -->
+      <Carousel
+        class="w-2/3 grabbable"
+        :per-page="1"
+        :paginationEnabled="true"
+        paginationActiveColor="#ef3073"
+        :loop="true"
+        :speed="500"
+        :autoplay="true"
+        :autoplayTimeout="5000"
+        :navigationEnabled="true"
+      >
+        <slide v-for="(itemGrid, index) in dataGrid" :key="index">
+          <div class="grid-card">
+            <div
+              v-for="(item, index) in itemGrid"
+              :key="index + 'name'"
+              class="card"
+            >
+              <router-link :to="'/detail/' + item.id">
                 <div
-                  class="flex justify-center border-b border-dotted border-[#d8d8d8] h-12"
+                  class="flex justify-center text-sm text-center uppercase items-center border-b border-dotted border-[#d8d8d8] h-14 p-3"
                 >
                   <span class="card-title" @click="viewDetail(item.id)">{{
                     item.name
@@ -42,20 +45,25 @@
                   />
                 </div>
                 <div class="card-footer">
-                  <span>Đơn giá: {{ item.price }}đ</span>
-                  <i class="fas fa-cart-plus" @click="addCart(item)"></i>
+                  <span>{{ item.price }}đ</span>
+                  <i
+                    class="fas fa-cart-plus text-[#ef3073]"
+                    @click="addCart(item)"
+                  ></i>
                 </div>
-              </div>
+              </router-link>
             </div>
-          </slide>
-        </carousel>
-        <div>
-          <img
-            src="https://www.anlocviet.vn/thumb/380x555/1/upload/product/bia-ho-so-2480.jpg"
-            alt=""
-          />
-        </div>
+          </div>
+        </slide>
+      </Carousel>
+      <div class="w-1/3 pl-4">
+        <img
+          class="h-full"
+          src="https://www.anlocviet.vn/thumb/380x555/1/upload/product/bia-ho-so-2480.jpg"
+          alt=""
+        />
       </div>
+      <!-- </div> -->
 
       <!-- <div class="pagination">
                 <Pagination ref="pagination" :itemCount="totalItems" :maxDisplayPage="3" :page="PageNumber" :perPage="18" @pageChange="pageChange"></Pagination>
@@ -181,10 +189,59 @@ export default {
 };
 </script>
 <style scoped>
+.grabbable {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.grabbable:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+::v-deep .VueCarousel-navigation-prev[data-v-453ad8cd] {
+  left: 35px;
+  color: #fff;
+  top: 44%;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  outline: none;
+  opacity: 0;
+}
+::v-deep .VueCarousel-navigation-prev[data-v-453ad8cd]:hover {
+  color: #ef3073;
+  border: 1px solid #ef3073;
+  opacity: 1;
+}
+::v-deep .VueCarousel-navigation-next[data-v-453ad8cd] {
+  right: 38px;
+  color: #fff;
+  top: 44%;
+  border: 1px solid fff;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  outline: none;
+}
+::v-deep .VueCarousel-navigation-next[data-v-453ad8cd]:hover {
+  color: #ef3073;
+  border: 1px solid #ef3073;
+}
 .grid-card {
   display: grid;
   grid-template-columns: auto auto auto auto;
   grid-row-gap: 16px;
+  grid-column-gap: 9px;
 }
 .list-product {
   width: 100%;
@@ -197,19 +254,20 @@ export default {
 }
 .list-product-content {
   display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  padding: 12px 0 0 0;
+  padding-top: 16px;
+  /* flex-wrap: wrap; */
+  /* gap: 24px; */
+  /* padding: 12px 0 0 0; */
 }
 .card {
-  /* flex-basis: 31%; */
   max-width: 200px;
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
-  /* position: relative; */
-  /* padding-bottom: 40px; */
   z-index: 1;
+}
+.card:hover {
+  cursor: pointer;
 }
 .card-content {
   overflow: hidden;
@@ -220,7 +278,7 @@ export default {
   font-weight: 500;
 }
 .card-title:hover {
-  color: #3daa12;
+  color: #ef3073;
 }
 .product-image img {
   max-height: 100%;
@@ -233,14 +291,14 @@ export default {
 .card-footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0 12px;
   width: 100%;
-  /* position: absolute; */
-  /* bottom: 0; */
+  height: 2.5rem;
   border-top: 1px dotted #d8d8d8;
 }
 .card-footer span {
-  color: #3daa12;
+  color: #ef3073;
 }
 .no-data {
   text-align: center;

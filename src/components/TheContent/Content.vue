@@ -43,16 +43,16 @@
         </carousel>
       </div>
       <div class="view">
-        <ListProduct
-          ref="listProduct"
-          v-if="!isDetail && showListProduct"
-          :title="categoryName"
-          :totalItems="totalItems"
-          :items="items"
-          @pageChange="pageChange"
-          @viewDetail="viewDetail"
-        ></ListProduct>
-        <ProductDetail v-else :item="item"></ProductDetail>
+        <div v-for="(product, index) in items" :key="index">
+          <ListProduct
+            ref="listProduct"
+            v-if="!isDetail && showListProduct"
+            :title="product.name"
+            :items="product.list"
+            @viewDetail="viewDetail"
+          ></ListProduct>
+        </div>
+        <!-- <ProductDetail v-if="isDetail" :item="item"></ProductDetail> -->
       </div>
     </div>
   </div>
@@ -60,13 +60,13 @@
 <script>
 import NavBar from "@/components/TheContent/NavBar";
 import ListProduct from "@/components/Bases/ListProduct";
-import ProductDetail from "@/view/ProductDetail";
+// import ProductDetail from "@/view/ProductDetail";
 import api from "@/js/api";
 import { Carousel, Slide } from "vue-carousel";
 export default {
   components: {
     NavBar,
-    ProductDetail,
+    // ProductDetail,
     ListProduct,
     Carousel,
     Slide,
@@ -87,56 +87,58 @@ export default {
   },
   methods: {
     async getData() {
-      await this.$axios
-        .get(`${api.ProductApi}/pagination`, {
-          params: {
-            id: this.category,
-            PageNumber: 1,
-          },
-        })
-        .then((res) => {
-          this.items = res.data.data;
-          this.showListProduct = true;
-          this.totalItems = res.data.totalRecord;
-        });
-      await this.$axios
-        .get(`${api.CategoryApi}/${this.category}`)
-        .then((res) => (this.categoryName = res.data.name));
+      await this.$axios.get(`${api.ProductApi}`).then((res) => {
+        this.items = res.data;
+        this.showListProduct = true;
+      });
     },
-    async changeCategory(value) {
-      this.category = value.id;
-      this.isDetail = false;
-      await this.$axios
-        .get(`${api.ProductApi}/pagination`, {
-          params: {
-            id: value.id,
-            PageNumber: 1,
-          },
-        })
-        .then((res) => {
-          this.items = res.data.data;
-          this.totalItems = res.data.totalRecord;
-          this.$refs.listProduct.resetPage();
-        });
-      await this.$axios
-        .get(`${api.CategoryApi}/${this.category}`)
-        .then((res) => (this.categoryName = res.data.name));
-    },
-    async pageChange(value) {
-      await this.$axios
-        .get(`${api.ProductApi}/pagination`, {
-          params: {
-            id: this.category,
-            PageNumber: value,
-          },
-        })
-        .then((res) => {
-          this.items = res.data.data;
-          console.log(res.data);
-          this.totalItems = res.data.totalRecord;
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-    },
+    // async getData() {
+    //   await this.$axios
+    //     .get(`${api.ProductApi}/pagination`, {
+    //       params: {
+    //         id: this.category,
+    //         PageNumber: 1,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       this.items = res.data.data;
+    //       this.showListProduct = true;
+    //     });
+    // },
+    // async changeCategory(value) {
+    //   this.category = value.id;
+    //   this.isDetail = false;
+    //   await this.$axios
+    //     .get(`${api.ProductApi}/pagination`, {
+    //       params: {
+    //         id: value.id,
+    //         PageNumber: 1,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       this.items = res.data.data;
+    //       this.totalItems = res.data.totalRecord;
+    //       this.$refs.listProduct.resetPage();
+    //     });
+    //   await this.$axios
+    //     .get(`${api.CategoryApi}/${this.category}`)
+    //     .then((res) => (this.categoryName = res.data.name));
+    // },
+    // async pageChange(value) {
+    //   await this.$axios
+    //     .get(`${api.ProductApi}/pagination`, {
+    //       params: {
+    //         id: this.category,
+    //         PageNumber: value,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       this.items = res.data.data;
+    //       console.log(res.data);
+    //       this.totalItems = res.data.totalRecord;
+    //       window.scrollTo({ top: 0, behavior: "smooth" });
+    //     });
+    // },
     viewDetail(value) {
       this.isDetail = true;
       this.item = value;
