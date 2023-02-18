@@ -4,13 +4,9 @@
       {{ title }}
     </div>
     <div class="list-product-content">
-      <!-- <div class="category-description" v-if="description">
-        {{ description }}
-      </div> -->
       <div v-if="!items.length" class="no-data">
         Hiện tại chưa có sản phẩm để hiển thị
       </div>
-      <!-- <div class="flex"> -->
       <Carousel
         class="w-2/3 grabbable"
         :per-page="1"
@@ -63,11 +59,6 @@
           alt=""
         />
       </div>
-      <!-- </div> -->
-
-      <!-- <div class="pagination">
-                <Pagination ref="pagination" :itemCount="totalItems" :maxDisplayPage="3" :page="PageNumber" :perPage="18" @pageChange="pageChange"></Pagination>
-            </div> -->
     </div>
     <ErrorPopup :title="mesage" @close="close" v-if="hasError"></ErrorPopup>
     <Loader v-if="hasLoader"></Loader>

@@ -1,9 +1,12 @@
 <template>
-  <div class=" border-b solid #ddd">
+  <div class="border-b solid #ddd">
     <div class="banner text-white w-[1200px] m-auto relative min-h-[120px]">
-      <div class="logo" data-aos="zoom-in-right" data-aos-duration="1500">
-        <img src="../../assets/image/logo.png" alt="" />
-      </div>
+      <router-link to="/home">
+        <div class="logo" data-aos="zoom-in-right" data-aos-duration="1500">
+          <img src="../../assets/image/logo.png" alt="" />
+        </div>
+      </router-link>
+
       <div class="search-box">
         <div class="search">
           <input

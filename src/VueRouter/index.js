@@ -11,8 +11,9 @@ import Cart from "@/components/TheContent/Cart";
 import DetailView from "@/components/Bases/DetailView";
 import ListDetailView from "@/components/Bases/ListDetailView";
 const routes = [
-  { path: "/", redirect: "/content" },
-  { path: "/content", component: Content },
+  { path: "/", redirect: "/home" },
+  { path: "/home", component: Content },
+  { path: "/category/:name",name:"listDetailView", component: ListDetailView},
   { path: "/signin", component: SignIn },
   { path: "/signup", component: SignUp },
   { path: "/infomation", component: AccountInfo },

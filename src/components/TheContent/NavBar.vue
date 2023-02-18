@@ -4,13 +4,17 @@
       <i class="fas fa-bars"></i>
       <span style="font-size: 20px; font-weight: 500">DANH MỤC SẢN PHẨM</span>
     </div> -->
-    <div
-      class="navbar__item"
-      v-for="item in list"
-      :key="item.id"
-      @click="$emit('changeCategory', item)"
-    >
-      {{ item.name }}
+    <div v-for="item in list" :key="item.id">
+      <router-link
+        :to="{
+          name: 'listDetailView',
+          params: { name: convertToSlug(item.name) },
+          query: { id: item.id },
+        }"
+        class="navbar__item"
+      >
+        {{ item.name }}
+      </router-link>
     </div>
   </div>
 </template>
@@ -30,6 +34,22 @@ export default {
       this.$axios.get(api.CategoryApi).then((res) => {
         this.list = res.data;
       });
+    },
+    convertToSlug(str) {
+      // remove accents
+      var from =
+          "àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ",
+        to =
+          "aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy";
+      for (var i = 0, l = from.length; i < l; i++) {
+        str = str.replace(RegExp(from[i], "gi"), to[i]);
+      }
+      str = str
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]/g, "-")
+        .replace(/-+/g, "-");
+      return str;
     },
   },
 };

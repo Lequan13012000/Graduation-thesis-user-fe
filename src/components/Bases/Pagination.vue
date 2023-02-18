@@ -13,7 +13,7 @@
         p == '...' && 'page-item--dot',
       ]"
       v-for="(p, index) in pages"
-      :key="index"
+      :key="index + 'page'"
       @click="setPage(p)"
     >
       {{ p }}
@@ -98,16 +98,17 @@ export default {
         //thêm trang cuối cùng nếu ep<pagecount
         pages.push(this.pageCount);
       }
+      console.log(pages);
       return pages;
     },
   },
   watch: {
     //số bản ghi trên 1 trang thay đổi
     perPage() {
-      this.setPage(1);
+      // this.setPage(1);
     },
-    page(val) {
-      this.setPage(val);
+    page() {
+      // this.setPage(val);
     },
   },
 };

@@ -1,14 +1,17 @@
 const api = "http://localhost:5139/api/v1";
 
-var CategoryApi = `${api}/Categories`;
-var ProductApi = `${api}/Products`;
-var OrderApi = `${api}/Orders`;
-var OrderDetailApi = `${api}/OrderDetails`;
-var CustomerApi = `${api}/Customers`;
-var CartApi = `${api}/Carts`;
+const CategoryApi = `${api}/Categories`;
+const ProductApi = `${api}/Products`;
+const ProductCategory =  `${api}/Products/Category`;
+const OrderApi = `${api}/Orders`;
+const OrderDetailApi = `${api}/OrderDetails`;
+const CustomerApi = `${api}/Customers`;
+const CartApi = `${api}/Carts`;
+
 export default {
     CategoryApi,
     ProductApi,
+    ProductCategory,
     OrderApi,
     OrderDetailApi,
     CustomerApi,
