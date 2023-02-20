@@ -12,6 +12,7 @@
           query: { id: item.id },
         }"
         class="navbar__item"
+        :class="{ 'navbar-active': item.id === idCategory }"
       >
         {{ item.name }}
       </router-link>
@@ -21,6 +22,7 @@
 <script>
 import api from "@/js/api";
 export default {
+  props: ["idCategory"],
   data() {
     return {
       list: [],
@@ -84,11 +86,15 @@ export default {
   text-align: left;
   padding: 0 24px;
   border-top: 1px solid #ccc;
-  transition: all linear 1s;
+  /* transition: all linear 1s; */
   cursor: pointer;
   border-bottom: 1px dotted #c7c7c7;
 }
 .navbar__item:hover {
+  background: #e56f98;
+  color: #fff;
+}
+.navbar-active {
   background: #ef3073;
   color: #fff;
 }

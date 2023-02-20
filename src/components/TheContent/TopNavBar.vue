@@ -1,6 +1,6 @@
 <template>
     <div class="top-navbar">
-        <!-- <router-link to="/content" class="top-navbar__item"
+        <!-- <router-link to="/home" class="top-navbar__item"
         data-aos="fade-left"
         data-aos-duration="1000">Trang chủ</router-link>
         <a href="#" class="top-navbar__item"

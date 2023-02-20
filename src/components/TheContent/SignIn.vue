@@ -1,5 +1,5 @@
 <template>
-    <div class="sign-in"
+    <div class="sign-in w-[1200px] m-auto relative"
     data-aos="flip-right"
      data-aos-easing="ease-out-cubic"
      data-aos-duration="1500">
@@ -61,7 +61,7 @@ export default {
                     if(res.data){
                         if(res.data.password == this.password){
                             this.$store.commit("TOGGLE_CUSTOMER",res.data);
-                            this.$router.replace({path:'/content'});
+                            this.$router.replace({path:'/home'});
                             window.scrollTo({ top: 0, behavior: "smooth" });
                         }
                         else{
@@ -88,7 +88,7 @@ export default {
 </script>
 <style scoped>
 .sign-in{
-    margin: 24px 48px;
+    /* margin: 24px 48px; */
     background-color: #fff;
     border-radius: 8px;
 }

@@ -172,7 +172,7 @@ export default {
     created(){
         this.customer= this.getCustomer;
         if(!this.customer){
-      this.$router.replace({path:"/content"})
+      this.$router.replace({path:"/home"})
     }
         this.getOrder();
     },

@@ -1,5 +1,5 @@
 <template>
-    <div class="sign-up"
+    <div class="sign-up w-[1200px] m-auto relative"
     data-aos="flip-left"
      data-aos-easing="ease-out-cubic"
      data-aos-duration="1500">
@@ -171,7 +171,7 @@ export default {
 </script>
 <style scoped>
 .sign-up{
-    margin: 24px 48px;
+    /* margin: 24px 48px; */
     background-color: #fff;
     border-radius: 8px;
 }

@@ -1,33 +1,40 @@
 <template>
   <div class="list-product w-[1200px] m-auto relative flex">
-    <NavBar></NavBar>
-    <div class="list-product-content">
-      <div class="category-description" v-if="description">
-        {{ description }}
-      </div>
-      <div class="card" v-for="(item, index) in items" :key="index">
-        <div class="card-content">
-          <div class="product-image" @click="viewDetail(item)">
-            <img :src="item.image || avatar" alt="" />
-          </div>
-          <div>
-            <span class="card-title">
-              <router-link :to="'/detail/' + item.id">
-                {{ item.name }}
-              </router-link>
-            </span>
-          </div>
+    <NavBar :idCategory="getIdCategory" ></NavBar>
+    <div class="flex flex-col">
+      <div class="list-product-content">
+        <div class="category-description" v-if="description">
+          {{ description }}
         </div>
-        <div class="card-footer">
-          <span>{{ item.price }}đ</span>
-          <i
-            class="fas fa-cart-plus"
-            @click="addCart(item)"
-          ></i>
+        <div class="card" v-for="(item, index) in items" :key="index">
+          <router-link :to="'/detail/' + item.id">
+            <div
+              class="flex justify-center text-sm text-center uppercase items-center border-b border-dotted border-[#d8d8d8] h-14 p-3"
+            >
+              <span class="card-title" @click="viewDetail(item.id)">{{
+                item.name
+              }}</span>
+            </div>
+            <div class="card-content" @click="viewDetail(item)">
+              <img
+                class="h-[162px] w-[190px]"
+                :src="item.image || avatar"
+                alt=""
+              />
+            </div>
+            <div class="card-footer">
+              <span>{{ item.price }}đ</span>
+              <i
+                class="fas fa-cart-plus text-[#ef3073]"
+                @click="addCart(item)"
+              ></i>
+            </div>
+          </router-link>
         </div>
       </div>
       <div class="pagination">
         <paginate
+          :key="componentKey"
           :page-count="totalPage"
           :click-handler="clickCallback"
           :prev-text="'Trước'"
@@ -41,6 +48,7 @@
         </paginate>
       </div>
     </div>
+
     <ErrorPopup :title="mesage" @close="close" v-if="hasError"></ErrorPopup>
     <Loader v-if="hasLoader"></Loader>
     <ToastMesage
@@ -76,12 +84,13 @@ export default {
       totalItems: 0,
       avatar: defaultAvatar,
       TotalRecord: this.totalItems,
-      PageNumber: 1,
+      pageNumber: 1,
       totalPage: 0,
       hasLoader: false,
       hasToast: false,
       hasError: false,
       mesage: "",
+      componentKey: 0,
     };
   },
   created() {
@@ -95,22 +104,31 @@ export default {
     getSearch() {
       return this.$route.params.search;
     },
+    getIdCategory() {
+      return this.$route.query.id;
+    },
+  },
+  watch: {
+    getIdCategory(value) {
+      this.componentKey = value;
+      this.clickCallback(1);
+    },
   },
   methods: {
     clickCallback(pageNum) {
-      this.PageNumber = pageNum;
+      this.pageNumber = pageNum;
       this.getData();
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     getData() {
       this.$axios
         .get(`${api.ProductCategory}/${this.$route.query.id}`, {
-          params: { PageNumber: this.PageNumber },
+          params: { pageNumber: this.pageNumber },
         })
         .then((res) => {
           this.items = res.data.data;
           this.totalItems = res.data.totalRecord;
-          this.totalPage = Number((this.totalItems / 8).toFixed());
+          this.totalPage = Number((this.totalItems / 6).toFixed());
         });
     },
     addCart(item) {
@@ -174,38 +192,30 @@ export default {
 } */
 .list-product-content {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   gap: 24px;
   padding: 12px 48px;
 }
 .card {
-  flex-basis: 22%;
+  max-width: 200px;
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
-  position: relative;
-  padding-bottom: 40px;
+  z-index: 1;
+}
+.card:hover {
+  cursor: pointer;
 }
 .card-content {
   overflow: hidden;
-  padding: 0 12px;
+  margin: 6px;
 }
 .card-title {
-  font-size: 28px;
   color: #000;
   font-weight: 500;
 }
 .card-title:hover {
-  color: #3daa12;
-}
-.product-image {
-  width: 100%;
-  height: 350px;
-  border-bottom: 1px solid #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #ef3073;
 }
 .product-image img {
   max-height: 100%;
@@ -218,13 +228,14 @@ export default {
 .card-footer {
   display: flex;
   justify-content: space-between;
-  padding: 12px;
+  align-items: center;
+  padding: 0 12px;
   width: 100%;
-  position: absolute;
-  bottom: 0;
+  height: 2.5rem;
+  border-top: 1px dotted #d8d8d8;
 }
 .card-footer span {
-  color: #3daa12;
+  color: #ef3073;
 }
 .pagination {
   display: flex;

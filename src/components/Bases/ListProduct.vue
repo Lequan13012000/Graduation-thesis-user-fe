@@ -44,7 +44,7 @@
                   <span>{{ item.price }}đ</span>
                   <i
                     class="fas fa-cart-plus text-[#ef3073]"
-                    @click="addCart(item)"
+                    @click.prevent="addCart(item)"
                   ></i>
                 </div>
               </router-link>

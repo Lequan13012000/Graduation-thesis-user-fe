@@ -72,7 +72,7 @@ export default {
   methods: {
     signOut() {
       this.$store.commit("TOGGLE_CUSTOMER", "");
-      this.$router.replace({ path: "/content" });
+      this.$router.replace({ path: "/home" });
     },
   },
   watch: {

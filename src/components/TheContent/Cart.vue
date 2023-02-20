@@ -47,7 +47,7 @@
     </div>
     <div class="cart-footer">
       <button class="button">
-        <router-link to="/content">Tiếp tục mua hàng</router-link>
+        <router-link to="/home">Tiếp tục mua hàng</router-link>
       </button>
       <button class="button" @click="payment()">Thanh toán</button>
     </div>
@@ -223,7 +223,7 @@ export default {
   created() {
     this.customer = this.getCustomer;
     if (!this.customer) {
-      this.$router.replace({ path: "/content" });
+      this.$router.replace({ path: "/home" });
     }
     this.getCart();
   },
@@ -389,7 +389,7 @@ export default {
               }, 3000);
               this.deleteCard();
               this.isPayMent = false;
-              this.$router.replace({ path: "/content" });
+              this.$router.replace({ path: "/home" });
             }
           });
         }

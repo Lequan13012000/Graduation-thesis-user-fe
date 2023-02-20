@@ -83,6 +83,7 @@ export default {
     };
   },
   created() {
+    this.$store.commit('SAVE_CUSTOMER');
     this.getData();
   },
   methods: {
@@ -92,53 +93,6 @@ export default {
         this.showListProduct = true;
       });
     },
-    // async getData() {
-    //   await this.$axios
-    //     .get(`${api.ProductApi}/pagination`, {
-    //       params: {
-    //         id: this.category,
-    //         PageNumber: 1,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       this.items = res.data.data;
-    //       this.showListProduct = true;
-    //     });
-    // },
-    // async changeCategory(value) {
-    //   this.category = value.id;
-    //   this.isDetail = false;
-    //   await this.$axios
-    //     .get(`${api.ProductApi}/pagination`, {
-    //       params: {
-    //         id: value.id,
-    //         PageNumber: 1,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       this.items = res.data.data;
-    //       this.totalItems = res.data.totalRecord;
-    //       this.$refs.listProduct.resetPage();
-    //     });
-    //   await this.$axios
-    //     .get(`${api.CategoryApi}/${this.category}`)
-    //     .then((res) => (this.categoryName = res.data.name));
-    // },
-    // async pageChange(value) {
-    //   await this.$axios
-    //     .get(`${api.ProductApi}/pagination`, {
-    //       params: {
-    //         id: this.category,
-    //         PageNumber: value,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       this.items = res.data.data;
-    //       console.log(res.data);
-    //       this.totalItems = res.data.totalRecord;
-    //       window.scrollTo({ top: 0, behavior: "smooth" });
-    //     });
-    // },
     viewDetail(value) {
       this.isDetail = true;
       this.item = value;
