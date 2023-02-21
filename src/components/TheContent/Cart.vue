@@ -1,6 +1,6 @@
 <template>
   <div
-    class="cart"
+    class="cart w-[1200px] m-auto relative"
     data-aos="flip-right"
     data-aos-easing="ease-out-cubic"
     data-aos-duration="1500"
@@ -115,7 +115,7 @@
               </div>
             </div>
           </div>
-          <div class="table">
+          <div class="table-container">
             <table>
               <thead>
                 <tr>
@@ -153,10 +153,8 @@
                 </tr>
               </tbody>
             </table>
-            <div class="total-money">
-              Tổng tiền thanh toán: {{ totalMoney }}đ
-            </div>
           </div>
+          <div class="total-money">Tổng tiền thanh toán: {{ totalMoney }} VNĐ</div>
         </div>
         <div class="cart-footer">
           <button class="button" @click="GetDefault()">Điền mặc định</button>
@@ -273,7 +271,6 @@ export default {
     },
     deleteCartItem(item) {
       this.selectedItem = item;
-      console.log(this.selectedItem);
       this.title = "Bạn có chắc muốn xóa mặt hàng này không?";
       this.hasQuestion = true;
     },
@@ -417,7 +414,6 @@ export default {
 .cart {
   border-radius: 8px;
   background-color: #fff;
-  margin: 24px 48px;
   min-height: 400px;
 }
 .cart-header {
@@ -439,6 +435,10 @@ export default {
   align-items: center;
   min-height: 400px;
 }
+.table-container {
+  height: 200px;
+  overflow-y: scroll;
+}
 table {
   border: 1px solid #ccc;
   border-collapse: collapse;
@@ -451,6 +451,8 @@ table th {
   line-height: 40px;
   padding: 4px 12px;
   background: #ccc;
+  position: sticky;
+  top: 0;
 }
 table img {
   width: 36px;
@@ -515,8 +517,8 @@ table input:focus {
   justify-content: space-between;
 }
 .form-content .table {
-  max-height: 200px;
-  overflow: auto;
+  /* max-height: 200px;
+  overflow: auto; */
 }
 .address-item {
   display: flex;
@@ -534,9 +536,8 @@ table input:focus {
 }
 .total-money {
   height: 40px;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 40px;
-  color: #3daa12;
   font-weight: 600;
 }
 </style>

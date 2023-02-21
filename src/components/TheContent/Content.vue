@@ -52,7 +52,6 @@
             @viewDetail="viewDetail"
           ></ListProduct>
         </div>
-        <!-- <ProductDetail v-if="isDetail" :item="item"></ProductDetail> -->
       </div>
     </div>
   </div>
@@ -60,13 +59,11 @@
 <script>
 import NavBar from "@/components/TheContent/NavBar";
 import ListProduct from "@/components/Bases/ListProduct";
-// import ProductDetail from "@/view/ProductDetail";
 import api from "@/js/api";
 import { Carousel, Slide } from "vue-carousel";
 export default {
   components: {
     NavBar,
-    // ProductDetail,
     ListProduct,
     Carousel,
     Slide,

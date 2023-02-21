@@ -1,6 +1,6 @@
 <template>
   <div class="list-product w-[1200px] m-auto relative flex">
-    <NavBar :idCategory="getIdCategory" ></NavBar>
+    <NavBar :idCategory="getIdCategory"></NavBar>
     <div class="flex flex-col">
       <div class="list-product-content">
         <div class="category-description" v-if="description">
@@ -26,7 +26,7 @@
               <span>{{ item.price }}đ</span>
               <i
                 class="fas fa-cart-plus text-[#ef3073]"
-                @click="addCart(item)"
+                @click.prevent="addCart(item)"
               ></i>
             </div>
           </router-link>
@@ -91,11 +91,11 @@ export default {
       hasError: false,
       mesage: "",
       componentKey: 0,
+      quantity: 1,
     };
   },
   created() {
     this.getData();
-    // this.$router.replace({ query: "" });
   },
   computed: {
     getCustomer() {
@@ -132,40 +132,58 @@ export default {
         });
     },
     addCart(item) {
-      let customer = this.getCustomer;
+      let customer = this.$store.state.customer;
       if (customer) {
-        this.$axios.get(`${api.CartApi}/${customer.id}`).then((res) => {
-          if (
-            res.data.some(
+        if (this.quantity)
+          this.$axios.get(`${api.CartApi}/${customer.id}`).then((res) => {
+            let inCart = res.data.find(
               (c) => c.cus_id == customer.id && c.prod_id == item.id
-            )
-          ) {
-            this.mesage = "Sản phẩm này đã có trong giỏ hàng";
-            this.hasError = true;
-            return;
-          }
-          let cart = {
-            cus_id: customer.id,
-            prod_id: item.id,
-            quantity: 1,
-          };
-          this.hasLoader = true;
-          this.$axios
-            .post(api.CartApi, cart)
-            .then((res) => {
-              if (res.status == 201) {
-                this.mesage = "Thêm vào giỏ hàng thành công.";
-                this.hasToast = true;
-                setTimeout(() => {
-                  this.hasToast = false;
-                }, 3000);
-                this.$axios.get(`${api.CartApi}/${customer.id}`).then((res) => {
-                  this.$store.commit("CHANGE_CART", res.data.length);
-                });
-              }
-            })
-            .finally(() => (this.hasLoader = false));
-        });
+            );
+            let cart = {
+              cus_id: customer.id,
+              prod_id: item.id,
+              quantity: this.quantity,
+            };
+            this.hasLoader = true;
+            if (inCart?.quantity) {
+              cart.quantity += inCart.quantity;
+              this.$axios
+                .put(api.CartApi, cart)
+                .then((res) => {
+                  if (res.status == 200) {
+                    this.mesage = "Thêm vào giỏ hàng thành công.";
+                    this.hasToast = true;
+                    setTimeout(() => {
+                      this.hasToast = false;
+                    }, 3000);
+                    this.$axios
+                      .get(`${api.CartApi}/${customer.id}`)
+                      .then((res) => {
+                        this.$store.commit("CHANGE_CART", res.data.length);
+                      });
+                  }
+                })
+                .finally(() => (this.hasLoader = false));
+            } else {
+              this.$axios
+                .post(api.CartApi, cart)
+                .then((res) => {
+                  if (res.status == 201) {
+                    this.mesage = "Thêm vào giỏ hàng thành công.";
+                    this.hasToast = true;
+                    setTimeout(() => {
+                      this.hasToast = false;
+                    }, 3000);
+                    this.$axios
+                      .get(`${api.CartApi}/${customer.id}`)
+                      .then((res) => {
+                        this.$store.commit("CHANGE_CART", res.data.length);
+                      });
+                  }
+                })
+                .finally(() => (this.hasLoader = false));
+            }
+          });
       } else {
         this.$router.replace({ path: "/signin" });
       }
