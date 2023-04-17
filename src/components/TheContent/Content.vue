@@ -46,10 +46,10 @@
         <div v-for="(product, index) in items" :key="index">
           <ListProduct
             ref="listProduct"
-            v-if="!isDetail && showListProduct"
-            :title="product.name"
-            :items="product.list"
-            @viewDetail="viewDetail"
+            v-if="showListProduct && product.list.length"
+            :data="product"
+            :keyList="index"
+            class="mt-8"
           ></ListProduct>
         </div>
       </div>
@@ -80,7 +80,7 @@ export default {
     };
   },
   created() {
-    this.$store.commit('SAVE_CUSTOMER');
+    this.$store.commit("SAVE_CUSTOMER");
     this.getData();
   },
   methods: {
@@ -90,23 +90,20 @@ export default {
         this.showListProduct = true;
       });
     },
-    viewDetail(value) {
-      this.isDetail = true;
-      this.item = value;
-    },
   },
 };
 </script>
 <style scoped>
 .bg-content {
-  background-image: url("../../assets/image/bg_body.png");
+  /* background-image: url("../../assets/image/bg_body.png");
   background-position-x: center;
   background-position-y: top;
   background-size: initial;
   background-attachment: initial;
   background-origin: initial;
   background-clip: initial;
-  background-color: initial;
+  background-color: initial; */
+  background-color: #f5f5f5;
 }
 .main-content {
   display: flex;
@@ -115,7 +112,7 @@ export default {
 }
 .list-category {
   padding-bottom: 25px;
-  border-top: 3px solid #ef3073;
+  border-top: 3px solid #f7462f;
   -moz-box-shadow: 0 0 5px 5px #dadada;
   -webkit-box-shadow: 0 0 5px 5px #dadada;
   box-shadow: 0 0 5px 5px #dadada;

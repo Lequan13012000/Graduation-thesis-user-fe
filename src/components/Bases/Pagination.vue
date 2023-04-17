@@ -98,7 +98,6 @@ export default {
         //thêm trang cuối cùng nếu ep<pagecount
         pages.push(this.pageCount);
       }
-      console.log(pages);
       return pages;
     },
   },

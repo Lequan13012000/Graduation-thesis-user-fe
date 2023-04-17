@@ -6,16 +6,22 @@
         <div class="category-description" v-if="description">
           {{ description }}
         </div>
-        <div class="card" v-for="(item, index) in items" :key="index">
+        <div
+          class="card"
+          v-for="(item, index) in items"
+          :key="index"
+          :tabindex="activeIndex === index ? 0 : -1"
+          @keydown.up.prevent="focusPrevious(index)"
+          @keydown.down.prevent="focusNext(index)"
+          @keydown.enter.prevent="selectItem(item)"
+        >
           <router-link :to="'/detail/' + item.id">
             <div
               class="flex justify-center text-sm text-center uppercase items-center border-b border-dotted border-[#d8d8d8] h-14 p-3"
             >
-              <span class="card-title" @click="viewDetail(item.id)">{{
-                item.name
-              }}</span>
+              <span class="card-title">{{ item.name }}</span>
             </div>
-            <div class="card-content" @click="viewDetail(item)">
+            <div class="card-content">
               <img
                 class="h-[162px] w-[190px]"
                 :src="item.image || avatar"
@@ -25,7 +31,7 @@
             <div class="card-footer">
               <span>{{ item.price }}đ</span>
               <i
-                class="fas fa-cart-plus text-[#ef3073]"
+                class="fas fa-cart-plus text-[#f7462f]"
                 @click.prevent="addCart(item)"
               ></i>
             </div>
@@ -92,10 +98,12 @@ export default {
       mesage: "",
       componentKey: 0,
       quantity: 1,
+      activeIndex: 0,
     };
   },
   created() {
-    this.getData();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    this.getData(this.getSearchKey);
   },
   computed: {
     getCustomer() {
@@ -107,23 +115,40 @@ export default {
     getIdCategory() {
       return this.$route.query.id;
     },
+    getSearchKey() {
+      return this.convertQuery(this.$route.query.search_key);
+    },
   },
   watch: {
     getIdCategory(value) {
       this.componentKey = value;
       this.clickCallback(1);
     },
+    getSearchKey(value) {
+      this.getData(value);
+    },
+    activeIndex(value) {
+      console.log(value);
+    },
   },
   methods: {
     clickCallback(pageNum) {
       this.pageNumber = pageNum;
-      this.getData();
+      this.getData(this.getSearchKey);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    getData() {
+    convertQuery(str) {
+      str = str.trim().replace(/-/g, " ");
+      return str;
+    },
+    getData(searchKey) {
       this.$axios
-        .get(`${api.ProductCategory}/${this.$route.query.id}`, {
-          params: { pageNumber: this.pageNumber },
+        .get(`${api.ProductApi}/search`, {
+          params: {
+            pageNumber: this.pageNumber,
+            limit: 6,
+            search_key: searchKey,
+          },
         })
         .then((res) => {
           this.items = res.data.data;
@@ -194,6 +219,24 @@ export default {
     close() {
       this.hasError = false;
     },
+
+    // use throw select item
+    focusPrevious(index) {
+      if (index > 0) {
+        this.activeIndex = index - 1;
+      }
+      console.log(index);
+    },
+    focusNext(index) {
+      if (index < this.items.length - 1) {
+        this.activeIndex = index + 1;
+      }
+      console.log(index);
+
+    },
+    selectItem() {
+      // Do something with the selected item
+    },
   },
 };
 </script>
@@ -201,13 +244,13 @@ export default {
 .list-product {
 }
 /* .list-product-title {
-  height: 60px;
-  border-bottom: 2px solid #333;
-  font-size: 32px;
-  font-weight: 600;
-  padding: 12px 48px;
-  color: #3daa12;
-} */
+    height: 60px;
+    border-bottom: 2px solid #333;
+    font-size: 32px;
+    font-weight: 600;
+    padding: 12px 48px;
+    color: #3daa12;
+  } */
 .list-product-content {
   display: flex;
   flex-wrap: wrap;
@@ -233,7 +276,7 @@ export default {
   font-weight: 500;
 }
 .card-title:hover {
-  color: #ef3073;
+  color: #f7462f;
 }
 .product-image img {
   max-height: 100%;
@@ -253,7 +296,7 @@ export default {
   border-top: 1px dotted #d8d8d8;
 }
 .card-footer span {
-  color: #ef3073;
+  color: #f7462f;
 }
 .pagination {
   display: flex;

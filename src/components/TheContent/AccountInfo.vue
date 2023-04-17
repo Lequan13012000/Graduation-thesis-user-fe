@@ -207,7 +207,6 @@ export default {
         },
         async getOrder(){
             await this.$axios.get(`${api.OrderApi}/${this.customer.id}`).then(res=>{
-            console.log(res.data);
             this.orderList = res.data.map(order=>{
                 let date = order.order_date.slice(0,10).split('/');
                 return{

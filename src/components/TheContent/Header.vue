@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-[#EF3073]">
-    <div class="header text-white bg-[#EF3073] w-[1200px] m-auto relative">
+  <div class="bg-[#f7462f]">
+    <div class="header text-white bg-[#f7462f] w-[1200px] m-auto relative">
       <div
         class="hotline content-item"
         data-aos="fade-left"
@@ -38,10 +38,6 @@
           <i class="fas fa-sign-in-alt"></i>
           <p @click="signOut">Đăng xuất</p>
         </div>
-        <router-link to="/cart" class="signup content-item">
-          <i class="fas fa-shopping-cart"></i>
-          <p>Giỏ hàng: {{ item }}</p>
-        </router-link>
       </div>
     </div>
   </div>
@@ -113,6 +109,6 @@ export default {
   opacity: 1;
 }
 .content-item:hover p {
-  color: #3daa12;
+  /* color: #3daa12; */
 }
 </style>

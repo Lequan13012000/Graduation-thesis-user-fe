@@ -1,17 +1,18 @@
 <template>
   <div class="list-product">
     <div class="list-product-title">
-      {{ title }}
+      {{ data.name }}
     </div>
     <div class="list-product-content">
-      <div v-if="!items.length" class="no-data">
+      <div v-if="!data.list.length" class="no-data">
         Hiện tại chưa có sản phẩm để hiển thị
-      </div>   
+      </div>
       <Carousel
         class="w-2/3 grabbable"
+        :class="{ 'order-1': keyList % 2 }"
         :per-page="1"
         :paginationEnabled="true"
-        paginationActiveColor="#ef3073"
+        paginationActiveColor="#f7462f"
         :loop="true"
         :speed="500"
         :autoplay="true"
@@ -24,45 +25,39 @@
               v-for="(item, index) in itemGrid"
               :key="index + 'name'"
               class="card"
+              v-on:mousedown="onDragStart($event)"
+              v-on:mouseup="onDragEnd($event)"
+              @click="viewDetail(item.id)"
             >
-              <router-link :to="'/detail/' + item.id">
-                <div
-                  class="flex justify-center text-sm text-center uppercase items-center border-b border-dotted border-[#d8d8d8] h-14 p-3"
-                >
-                  <span class="card-title" @click="viewDetail(item.id)">{{
-                    item.name
-                  }}</span>
-                </div>
-                <div class="card-content" @click="viewDetail(item)">
-                  <img
-                    class="h-[162px] w-[190px]"
-                    :src="item.image || avatar"
-                    alt=""
-                  />
-                </div>
-                <div class="card-footer">
-                  <span>{{ item.price }}đ</span>
-                  <i
-                    class="fas fa-cart-plus text-[#ef3073]"
-                    @click.prevent="addCart(item)"
-                  ></i>
-                </div>
-              </router-link>
+              <div
+                class="flex justify-center text-sm text-center uppercase items-center border-b border-dotted border-[#d8d8d8] h-14 p-3"
+              >
+                <span class="card-title">{{ item.name }}</span>
+              </div>
+              <div class="card-content">
+                <img
+                  class="h-[162px] w-[190px]"
+                  :src="item.image || avatar"
+                  alt=""
+                />
+              </div>
+              <div class="card-footer">
+                <span>{{ item.price }}đ</span>
+                <i
+                  class="fas fa-cart-plus text-[#f7462f]"
+                  @click.stop="addCart(item)"
+                ></i>
+              </div>
             </div>
           </div>
         </slide>
-      </Carousel>    
+      </Carousel>
       <div class="w-1/3 pl-4">
-        <img
-          class="h-full"
-          src="https://www.anlocviet.vn/thumb/380x555/1/upload/product/bia-ho-so-2480.jpg"
-          alt=""
-        />
+        <img class="h-full" :src="data.image" alt="" />
       </div>
     </div>
     <ErrorPopup :title="mesage" @close="close" v-if="hasError"></ErrorPopup>
-    <Loader v-if="hasLoader">
-    </Loader>
+    <Loader v-if="hasLoader"> </Loader>
     <ToastMesage
       v-if="hasToast"
       :mesage="mesage"
@@ -72,23 +67,20 @@
 </template>
 <script>
 import defaultAvatar from "../../assets/image/img_default.jpg";
-// import Pagination from "@/components/Bases/Pagination";
 import Loader from "@/components/Bases/Loader";
 import ToastMesage from "@/components/Bases/ToastMesage";
 import ErrorPopup from "@/components/Bases/BasePopup/ErrorPopup";
 import api from "@/js/api";
 import { Carousel, Slide } from "vue-carousel";
-
 export default {
   components: {
-    // Pagination,
     Loader,
     ToastMesage,
     ErrorPopup,
     Carousel,
     Slide,
   },
-  props: ["title", "items", "description", "totalItems"],
+  props: ["data", "keyList", "totalItems"],
   data() {
     return {
       avatar: defaultAvatar,
@@ -100,6 +92,9 @@ export default {
       mesage: "",
       dataGrid: [],
       quantity: 1,
+      dragging: false,
+      cXCurrent: null,
+      cYCurrent: null,
     };
   },
   created() {
@@ -110,6 +105,7 @@ export default {
       return this.$store.state.customer;
     },
   },
+  watch: {},
   methods: {
     chunkArrayInGroups(arr, size) {
       let result = [];
@@ -121,7 +117,7 @@ export default {
       return result;
     },
     getGridData() {
-      this.dataGrid = this.chunkArrayInGroups(this.items, 8);
+      this.dataGrid = this.chunkArrayInGroups(this.data.list, 8);
     },
     resetPage() {
       this.$refs.pagination.resetPage();
@@ -129,9 +125,6 @@ export default {
     pageChange(value) {
       this.PageNumber = value;
       this.$emit("pageChange", value);
-    },
-    viewDetail(value) {
-      this.$emit("viewDetail", value);
     },
     addCart(item) {
       let customer = this.$store.state.customer;
@@ -190,6 +183,26 @@ export default {
         this.$router.replace({ path: "/signin" });
       }
     },
+    onDragStart(event) {
+      this.cXCurrent = event.clientX;
+      this.cYCurrent = event.clientY;
+    },
+    onDragEnd(event) {
+      if (
+        this.cXCurrent !== event.clientX &&
+        this.cYCurrent !== event.clientY
+      ) {
+        this.dragging = true;
+      }
+    },
+    viewDetail(idProduct) {
+      if (!this.dragging) {
+        this.$router.push("/detail/" + idProduct);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        this.dragging = false;
+      }
+    },
     closeToast() {
       this.hasToast = false;
     },
@@ -227,8 +240,8 @@ export default {
   opacity: 0;
 }
 ::v-deep .VueCarousel-navigation-prev[data-v-453ad8cd]:hover {
-  color: #ef3073;
-  border: 1px solid #ef3073;
+  color: #f7462f;
+  border: 1px solid #f7462f;
   opacity: 1;
 }
 ::v-deep .VueCarousel-navigation-next[data-v-453ad8cd] {
@@ -245,8 +258,8 @@ export default {
   outline: none;
 }
 ::v-deep .VueCarousel-navigation-next[data-v-453ad8cd]:hover {
-  color: #ef3073;
-  border: 1px solid #ef3073;
+  color: #f7462f;
+  border: 1px solid #f7462f;
 }
 .grid-card {
   display: grid;
@@ -267,11 +280,11 @@ export default {
   display: flex;
   padding-top: 16px;
   /* flex-wrap: wrap; */
-  /* gap: 24px; */
+  gap: 24px;
   /* padding: 12px 0 0 0; */
 }
 .card {
-  max-width: 200px;
+  max-width: 190px;
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -289,7 +302,7 @@ export default {
   font-weight: 500;
 }
 .card-title:hover {
-  color: #ef3073;
+  color: #f7462f;
 }
 .product-image img {
   max-height: 100%;
@@ -309,7 +322,7 @@ export default {
   border-top: 1px dotted #d8d8d8;
 }
 .card-footer span {
-  color: #ef3073;
+  color: #f7462f;
 }
 .no-data {
   text-align: center;

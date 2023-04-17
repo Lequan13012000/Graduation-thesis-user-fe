@@ -7,7 +7,7 @@
     <div v-for="item in list" :key="item.id">
       <router-link
         :to="{
-          name: 'listDetailView',
+          name: 'productByCategory',
           params: { name: convertToSlug(item.name) },
           query: { id: item.id },
         }"
@@ -91,11 +91,11 @@ export default {
   border-bottom: 1px dotted #c7c7c7;
 }
 .navbar__item:hover {
-  background: #e56f98;
+  background: #f17463;
   color: #fff;
 }
 .navbar-active {
-  background: #ef3073;
+  background: #f7462f;
   color: #fff;
 }
 </style>
