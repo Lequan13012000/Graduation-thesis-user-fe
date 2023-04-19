@@ -3,7 +3,7 @@
     min-width: 100px;
     border: 1px solid transparent;
     color: #fff;
-    background: #f7462f;
+    background: #a11f2c;
     border-radius: 4px;
     font-size: 16px;
     padding: 0 12px;
@@ -25,7 +25,7 @@
 }
 
 .button-secondary:hover {
-    color: #f7462f;
-    border: 1px solid #f7462f;
+    color: #a11f2c;
+    border: 1px solid #a11f2c;
     background-color: #fff;
 } */

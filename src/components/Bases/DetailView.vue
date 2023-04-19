@@ -107,7 +107,7 @@
           class="grabbable"
           :per-page="5"
           :paginationEnabled="true"
-          paginationActiveColor="#f7462f"
+          paginationActiveColor="#a11f2c"
           :loop="true"
           :speed="500"
           :autoplay="true"
@@ -136,7 +136,7 @@
               <div class="card-footer">
                 <span>{{ product.price }}đ</span>
                 <i
-                  class="fas fa-cart-plus text-[#f7462f]"
+                  class="fas fa-cart-plus text-[#a11f2c]"
                   @click.prevent="addCart(product)"
                 ></i>
               </div>
@@ -337,8 +337,8 @@ export default {
   opacity: 0;
 }
 ::v-deep .VueCarousel-navigation-prev[data-v-453ad8cd]:hover {
-  color: #f7462f;
-  border: 1px solid #f7462f;
+  color: #a11f2c;
+  border: 1px solid #a11f2c;
   opacity: 1;
 }
 ::v-deep .VueCarousel-navigation-next[data-v-453ad8cd] {
@@ -355,8 +355,8 @@ export default {
   outline: none;
 }
 ::v-deep .VueCarousel-navigation-next[data-v-453ad8cd]:hover {
-  color: #f7462f;
-  border: 1px solid #f7462f;
+  color: #a11f2c;
+  border: 1px solid #a11f2c;
 }
 .title {
   border-bottom: 2px solid #ccc;
@@ -488,7 +488,7 @@ input[type="number"] {
   font-weight: 500;
 }
 .card-title:hover {
-  color: #f7462f;
+  color: #a11f2c;
 }
 .product-image img {
   max-height: 100%;
@@ -508,7 +508,7 @@ input[type="number"] {
   border-top: 1px dotted #d8d8d8;
 }
 .card-footer span {
-  color: #f7462f;
+  color: #a11f2c;
 }
 .collapse-description {
   height: 300px;

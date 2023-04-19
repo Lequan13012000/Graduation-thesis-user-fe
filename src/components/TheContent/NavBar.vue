@@ -95,7 +95,7 @@ export default {
   color: #fff;
 }
 .navbar-active {
-  background: #f7462f;
+  background: #a11f2c;
   color: #fff;
 }
 </style>

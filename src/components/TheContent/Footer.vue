@@ -42,7 +42,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #f7462f;
+    border: 1px solid #a11f2c;
     border-radius: 4px;
 }
 </style>

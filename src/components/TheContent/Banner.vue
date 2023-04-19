@@ -22,7 +22,7 @@
           <button class="absolute right-0 h-[40px] pr-2">
             <div class="flex">
               <span
-                class="material-icons text-[#F7941E]"
+                class="material-icons text-[#a11f2c]"
                 @click="searchProduct()"
                 >search</span
               >
@@ -52,11 +52,11 @@
       </div>
 
       <router-link to="/cart" class="relative cursor-pointer mr-2">
-        <span class="material-icons text-4xl text-[#F7941E]">
+        <span class="material-icons text-4xl text-[#a11f2c]">
           shopping_cart
         </span>
         <div
-          class="absolute px-[0.5rem] rounded-full bg-[#F7941E] text-center top-[-10px] right-[-10px]"
+          class="absolute px-[0.5rem] rounded-full bg-[#a11f2c] text-center top-[-10px] right-[-10px]"
         >
           {{ qualityCart }}
         </div>

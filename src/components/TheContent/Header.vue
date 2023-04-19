@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-[#f7462f]">
-    <div class="header text-white bg-[#f7462f] w-[1200px] m-auto relative">
+  <div class="bg-[#a11f2c]">
+    <div class="header text-white bg-[#a11f2c] w-[1200px] m-auto relative">
       <div
         class="hotline content-item"
         data-aos="fade-left"
@@ -68,6 +68,7 @@ export default {
   methods: {
     signOut() {
       this.$store.commit("TOGGLE_CUSTOMER", "");
+      this.$store.commit("CHANGE_CART","")
       this.$router.replace({ path: "/home" });
     },
   },
@@ -91,7 +92,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 40px;
+  height: 52px;
 }
 .account {
   display: flex;

@@ -112,7 +112,7 @@ export default {
 }
 .list-category {
   padding-bottom: 25px;
-  border-top: 3px solid #f7462f;
+  border-top: 3px solid #a11f2c;
   -moz-box-shadow: 0 0 5px 5px #dadada;
   -webkit-box-shadow: 0 0 5px 5px #dadada;
   box-shadow: 0 0 5px 5px #dadada;

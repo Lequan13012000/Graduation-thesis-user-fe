@@ -31,7 +31,7 @@
             <div class="card-footer">
               <span>{{ item.price }}đ</span>
               <i
-                class="fas fa-cart-plus text-[#f7462f]"
+                class="fas fa-cart-plus text-[#a11f2c]"
                 @click.prevent="addCart(item)"
               ></i>
             </div>
@@ -276,7 +276,7 @@ export default {
   font-weight: 500;
 }
 .card-title:hover {
-  color: #f7462f;
+  color: #a11f2c;
 }
 .product-image img {
   max-height: 100%;
@@ -296,7 +296,7 @@ export default {
   border-top: 1px dotted #d8d8d8;
 }
 .card-footer span {
-  color: #f7462f;
+  color: #a11f2c;
 }
 .pagination {
   display: flex;
