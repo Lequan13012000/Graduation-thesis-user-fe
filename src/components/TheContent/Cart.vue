@@ -1,180 +1,73 @@
 <template>
-  <div
-    class="cart w-[1200px] m-auto relative"
-    data-aos="flip-right"
-    data-aos-easing="ease-out-cubic"
-    data-aos-duration="1500"
-  >
-    <div class="cart-header">Giỏ hàng</div>
-    <div class="cart-content">
-      <NoData v-if="noData"></NoData>
-      <table v-else>
-        <thead>
-          <tr data-aos="fade-right" data-aos-duration="2000">
-            <th>#</th>
-            <th>Hình ảnh</th>
-            <th>Tên sản phẩm</th>
-            <th>Đơn giá</th>
-            <th>Đơn vị tính</th>
-            <th>Số lượng</th>
-            <th>Thành tiền</th>
-            <th>Xóa</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in items" :key="item.id + index + item.name">
-            <td style="min-width: 40px">{{ index + 1 }}</td>
-            <td style="min-width: 40px; display: flex; justify-content: center">
-              <img :src="item.image || avatar" alt="" />
-            </td>
-            <td style="min-width: 400px">{{ item.name }}</td>
-            <td style="min-width: 100px">{{ item.price }}</td>
-            <td style="min-width: 120px">{{ item.unit }}</td>
-            <td style="min-width: 110px">
-              <input
-                type="number"
-                v-model="item.quantity"
-                @change="changeQuantity(item)"
-              />
-            </td>
-            <td style="min-width: 120px">{{ item.price * item.quantity }}</td>
-            <td style="min-width: 40px">
-              <i class="far fa-trash-alt" @click="deleteCartItem(item)"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="cart-footer">
-      <button class="button">
-        <router-link to="/home">Tiếp tục mua hàng</router-link>
-      </button>
-      <button class="button" @click="payment()">Thanh toán</button>
-    </div>
-    <div class="payment-form" v-if="isPayMent">
-      <div class="payment-form-content">
-        <div class="cart-header">
-          <div>Đặt hàng</div>
-          <i class="far fa-times-circle" @click="isPayMent = false"></i>
-        </div>
-        <div class="form-content">
-          <div class="form-content-info">
-            <div class="form-address">
-              <div style="font-weight: 600">Thông tin nhận hàng</div>
-              <div class="address-item">
-                <i class="fas fa-user"></i>
-                <span>Họ tên người nhận:</span>
-                <input
-                  type="text"
-                  class="input"
-                  placeholder="Họ tên..."
-                  v-model="payMentInfo.name"
-                  :class="{ 'input-error': !isName.isTrue }"
-                  @change="ValidateOrder"
-                  :title="isName.title"
-                />
-              </div>
-              <div class="address-item">
-                <i class="fas fa-phone-alt"></i>
-                <span>Số điện thoại:</span>
-                <input
-                  type="text"
-                  class="input"
-                  placeholder="Số điện thoại..."
-                  v-model="payMentInfo.tel"
-                  :class="{ 'input-error': !isTel.isTrue }"
-                  @change="ValidateOrder"
-                  :title="isTel.title"
-                />
-              </div>
+  <div class="cart">
+    <div class="w-[1200px] m-auto relative" data-aos="flip-right" data-aos-easing="ease-out-cubic"
+      data-aos-duration="1500">
+      <div class="cart-header">GIỎ HÀNG</div>
+      <div class="cart-content">
+        <NoData v-if="noData"></NoData>
+        <div v-else>
+          <div class="header-cart-item">
+            <div class="checkbox-all-product">
+              <input class="checkbox-add-cart" type="checkbox" id="checkbox-all-products" v-model="isSelectedAll"
+                @change="selectAll">
             </div>
-            <div class="form-note">
-              <div style="font-weight: 600">....</div>
-              <div class="address-item">
-                <i class="fas fa-home"></i>
-                <span>Địa chỉ nhận hàng:</span>
-                <input
-                  type="text"
-                  class="input"
-                  placeholder="Địa chỉ..."
-                  v-model="payMentInfo.address"
-                  :class="{ 'input-error': !isAddress.isTrue }"
-                  @change="ValidateOrder"
-                  :title="isAddress.title"
-                />
+            <div style="margin-right: 9rem;margin-left: 2rem;"><span class="num-items-checkbox">Sản phẩm</span></div>
+            <div style="margin-left: 10rem;margin-right: 3rem;">Đơn giá</div>
+            <div style="margin-right: 1.2rem;">Số lượng</div>
+            <div>Thành tiền</div>
+            <div></div>
+          </div>
+          <div class="content-card-item">
+            <div class="item-card" v-for="(item, index) in items" :key="item.id + index + item.name">
+              <div class="checkbox" style="min-width: 40px"><input type="checkbox" v-model="item.checked"
+                  @click="getCardPayment(item, index)">
               </div>
-              <div class="address-item">
-                <i class="fas fa-comment-dots"></i>
-                <span>Ghi chú:</span>
-                <input
-                  type="text"
-                  class="input"
-                  placeholder="Ghi chú..."
-                  v-model="payMentInfo.notes"
-                />
+              <div style="display: flex;align-items: center;padding-left: 2rem;">
+                <img :src="item.image || avatar" alt="" />
+                <p
+                  style="margin-right: 2rem;text-overflow: ellipsis;word-break: break-word;width: 250px;text-align: left;margin-left: 1rem;">
+                  {{ item.name }}</p>
+              </div>
+              <p class="price"><span>₫</span> {{ item.price }}</p>
+              <div style="padding-left: 7rem;">
+                <div class="quantity">
+                  <input type="button" value="-" @click="decQuantity(item)" />
+                  <input type="number" min="1" max="9999" name="quantity" v-model="item.quantity"
+                    class="numberQuantity" />
+                  <input type="button" value="+" @click="ascQuantity(item)" />
+                </div>
+              </div>
+              <p class="price" style="min-width: 120px;padding-left: 6rem;"><span>₫</span> {{ item.price * item.quantity
+              }}</p>
+              <div style="min-width: 40px;padding-left: 6.2rem;cursor: pointer;">
+                <i class="far fa-trash-alt" @click="deleteCartItem(item)"></i>
               </div>
             </div>
           </div>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Hình ảnh</th>
-                  <th>Tên sản phẩm</th>
-                  <th>Đơn giá</th>
-                  <th>Đơn vị tính</th>
-                  <th>Số lượng</th>
-                  <th>Thành tiền</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(item, index) in items"
-                  :key="index + item.id + item.image"
-                >
-                  <td style="min-width: 40px">{{ index + 1 }}</td>
-                  <td
-                    style="
-                      min-width: 40px;
-                      display: flex;
-                      justify-content: center;
-                    "
-                  >
-                    <img :src="item.image || avatar" alt="" />
-                  </td>
-                  <td style="min-width: 400px">{{ item.name }}</td>
-                  <td style="min-width: 100px">{{ item.price }}</td>
-                  <td style="min-width: 120px">{{ item.unit }}</td>
-                  <td style="min-width: 110px">{{ item.quantity }}</td>
-                  <td style="min-width: 120px">
-                    {{ item.price * item.quantity }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="total-money">Tổng tiền thanh toán: {{ totalMoney }} VNĐ</div>
-        </div>
-        <div class="cart-footer">
-          <button class="button" @click="GetDefault()">Điền mặc định</button>
-          <button class="button" @click="AddOrder()">Đặt hàng</button>
         </div>
       </div>
+      <div class="cart-footer">
+        <div class="h-[3rem] bg-[#9b9090] text-white flex items-center px-5 rounded-lg ml-10"> <button class="button">
+            <router-link to="/home">TIẾP TỤC MUA HÀNG</router-link>
+          </button></div>
+        <div class="flex items-center ">
+          <div class="flex items-center ml-10 text-lg font-bold">Tổng số tiền: <p class="price" style="font-size: 18px;">
+              <span>₫</span> {{ totalMoney }}
+            </p>
+          </div>
+          <button @click="payment()" class="h-[3rem] text-white flex items-center px-5 rounded-lg mx-[2.5rem]"
+            :class="listPayment.length ? 'bg-[#C92127] cursor-pointer' : 'bg-[#e0e0e0] cursor-no-drop'"
+            :disabled="!listPayment.length">
+            THANH TOÁN
+          </button>
+        </div>
+
+      </div>
+      <Loader v-if="hasLoader"></Loader>
+      <ErrorPopup @close="close" :title="title" v-if="hasError"></ErrorPopup>
+      <QuestionPopup :title="title" @close="close" @yes="yes" v-if="hasQuestion"></QuestionPopup>
+      <ToastMesage :mesage="title" @closeToast="closeToast" v-if="hasToast"></ToastMesage>
     </div>
-    <Loader v-if="hasLoader"></Loader>
-    <ErrorPopup @close="close" :title="title" v-if="hasError"></ErrorPopup>
-    <QuestionPopup
-      :title="title"
-      @close="close"
-      @yes="yes"
-      v-if="hasQuestion"
-    ></QuestionPopup>
-    <ToastMesage
-      :mesage="title"
-      @closeToast="closeToast"
-      v-if="hasToast"
-    ></ToastMesage>
   </div>
 </template>
 <script>
@@ -195,27 +88,19 @@ export default {
   },
   data() {
     return {
-      totalMoney: 0,
       noData: false,
       items: [],
       avatar: defaultAvatar,
-      isPayMent: false,
+      checkedPayment: false,
       customer: {},
       hasLoader: false,
       hasQuestion: false,
       hasError: false,
       hasToast: false,
       title: "",
-      payMentInfo: {
-        name: "",
-        tel: "",
-        address: "",
-        notes: "",
-      },
       selectedItem: {},
-      isName: { title: "", isTrue: true },
-      isTel: { title: "", isTrue: true },
-      isAddress: { title: "", isTrue: true },
+      listPayment: [],
+      isSelectedAll: false
     };
   },
   created() {
@@ -229,20 +114,45 @@ export default {
     getCustomer() {
       return this.$store.state.customer;
     },
-  },
-  methods: {
-    payment() {
-      if (!this.items.length) {
-        this.title =
-          "Không có sản phẩm nào trong giỏ hàng, vui lòng thêm hàng vào giỏ trước khi đặt.";
-        this.hasError = true;
-        return;
-      }
-      this.totalMoney = this.items.reduce(
+    totalMoney() {
+      return this.listPayment.reduce(
         (total, item) => total + item.quantity * item.price,
         0
       );
-      this.isPayMent = true;
+    }, getPayment() {
+      return this.$store.state.payment;
+    },
+  },
+  methods: {
+    getCardPayment(item) {
+      const isHas = this.listPayment.findIndex((payment) => payment.prod_id === item.prod_id);
+      if (isHas !== -1) {
+        this.listPayment.splice(isHas, 1);
+        this.isSelectedAll = false;
+      }
+      else {
+        this.listPayment.push(item);
+        if (this.listPayment.length === this.items.length) {
+          this.isSelectedAll = true;
+        }
+      }
+      this.$store.commit("CHANGE_PAYMENT", this.listPayment);
+    },
+    selectAll() {
+      for (let i = 0; i < this.items.length; i++) {
+        this.items[i].checked = this.isSelectedAll;
+        if (this.isSelectedAll) {
+          this.listPayment.push(this.items[i]);
+        }
+        else {
+          this.listPayment = []
+        }
+      }
+      this.$store.commit("CHANGE_PAYMENT", this.listPayment);
+    },
+    payment() {
+      this.$router.push("/payment");
+      this.$store.commit("CHANGE_PAYMENT", this.listPayment);
     },
     getCart() {
       this.hasLoader = true;
@@ -250,6 +160,28 @@ export default {
         .get(`${api.CartApi}/${this.customer.id}`)
         .then((res) => {
           this.items = res.data;
+          if (this.getPayment.length) {
+            // this.items = this.items.map(item => {
+            //   const isHas = this.getPayment.find((payment) => payment.prod_id === item.prod_id);
+            //   if (isHas?.checked) {
+            //     return {
+            //       ...item, checked: true
+            //     }
+            //   }
+            //   else {
+            //     return {
+            //       ...item, checked: false
+            //     }
+            //   }
+            // })
+          }
+          else {
+            this.items = this.items.map(item => {
+              return {
+                ...item, checked: false
+              }
+            })
+          }
           if (this.items.length === 0) {
             this.noData = true;
           } else {
@@ -259,7 +191,19 @@ export default {
         })
         .finally(() => (this.hasLoader = false));
     },
-    changeQuantity(item) {
+    ascQuantity(item) {
+      item.quantity++;
+      if (item.quantity == 0) {
+        this.selectedItem = item;
+        this.yes();
+      }
+      this.hasLoader = true;
+      this.$axios
+        .put(api.CartApi, item)
+        .finally(() => (this.hasLoader = false));
+    },
+    decQuantity(item) {
+      if (item.quantity > 0) item.quantity--;
       if (item.quantity == 0) {
         this.selectedItem = item;
         this.yes();
@@ -296,109 +240,6 @@ export default {
         })
         .finally(() => (this.hasLoader = false));
     },
-    ValidateOrder() {
-      let check = 0;
-      if (!this.payMentInfo.address) {
-        this.isAddress.title = "Địa chỉ nhận hàng không được để trống.";
-        this.isAddress.isTrue = false;
-        this.title = "Địa chỉ nhận hàng không được để trống.";
-        check = check + 1;
-      } else {
-        this.isAddress.title = "";
-        this.isAddress.isTrue = true;
-      }
-      if (!this.payMentInfo.tel) {
-        this.isTel.title = "Số điện thoại không được phép bỏ trống.";
-        this.isTel.isTrue = false;
-        this.title = "Số điện thoại không được phép bỏ trống.";
-        check = check + 1;
-      } else {
-        this.isTel.title = "";
-        this.isTel.isTrue = true;
-      }
-      if (this.payMentInfo.tel && !/^\d{10}$/.test(this.payMentInfo.tel)) {
-        this.isTel.title = "Số diện thoại không đúng định dạng.";
-        this.isTel.isTrue = false;
-        this.title = "Số điện thoại không đúng định dạng.";
-        check = check + 1;
-      } else {
-        this.isTel.title = "";
-        this.isTel.isTrue = true;
-      }
-      if (!this.payMentInfo.name) {
-        this.isName.title = "Họ tên không được phép bỏ trống.";
-        this.isName.isTrue = false;
-        this.title = "Họ tên không được phép bỏ trống.";
-        check = check + 1;
-      } else {
-        this.isName.title = "";
-        this.isName.isTrue = true;
-      }
-      return check;
-    },
-    GetDefault() {
-      let customer = this.getCustomer;
-      this.payMentInfo.name = customer.name;
-      this.payMentInfo.tel = customer.tel;
-      this.payMentInfo.address = customer.address;
-    },
-    async AddOrder() {
-      if (this.ValidateOrder() > 0) {
-        this.hasError = true;
-      } else {
-        var today = new Date();
-        var date =
-          today.getFullYear() +
-          "-" +
-          (today.getMonth() + 1) +
-          "-" +
-          today.getDate();
-        let order = {
-          id: 1,
-          cus_id: this.getCustomer.id,
-          order_date: date,
-          status: "Đang chờ xác nhận",
-          notes: this.payMentInfo.notes,
-          address: this.payMentInfo.address,
-          tel: this.payMentInfo.tel,
-          name: this.payMentInfo.name,
-        };
-        let addedOrder;
-        await this.$axios.post(api.OrderApi, order).then((res) => {
-          addedOrder = res.status;
-        });
-        if (addedOrder == 201) {
-          let orderId = await this.$axios
-            .get(`${api.OrderApi}/newOrder`)
-            .then((res) => res.data);
-          let od = this.items.map((item) => ({
-            prod_id: item.prod_id,
-            order_id: orderId,
-            quantity: item.quantity,
-            price: item.price,
-          }));
-          this.$axios.post(api.OrderDetailApi, od).then((res) => {
-            if (res.status == 201) {
-              this.title = "Tạo đơn hàng thành công.";
-              this.hasToast = true;
-              setTimeout(() => {
-                this.hasToast = false;
-              }, 3000);
-              this.deleteCard();
-              this.isPayMent = false;
-              this.$router.replace({ path: "/home" });
-            }
-          });
-        }
-      }
-    },
-    deleteCard() {
-      this.$axios.delete(`${api.CartApi}/${this.customer.id}`).then((res) => {
-        if (res.status == 200) {
-          this.$store.commit("CHANGE_CART", 0);
-        }
-      });
-    },
     closeToast() {
       this.hasToast = false;
     },
@@ -413,131 +254,162 @@ export default {
 <style scoped>
 .cart {
   border-radius: 8px;
-  background-color: #fff;
+  background-color: #f5f5f5;
   min-height: 400px;
+  padding-bottom: 24px;
 }
+
 .cart-header {
-  height: 40px;
-  line-height: 40px;
-  padding: 0 12px;
-  font-size: 24px;
-  font-weight: 600;
-  border-bottom: 2px solid #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  margin: 0px 0 0;
+  font-weight: 500;
+  color: #333333 !important;
+  line-height: 20px;
+  font-size: 20px;
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 
 .cart-content {
-  padding: 24px;
-  display: flex;
-  justify-content: center;
   align-items: center;
   min-height: 400px;
 }
-.table-container {
-  height: 200px;
-  overflow-y: scroll;
+
+
+.content-card-item {
+  background: #fff;
+  border-radius: 8px;
 }
-table {
-  border: 1px solid #ccc;
-  border-collapse: collapse;
+
+.item-card img {
+  width: 119px;
+  height: 119px;
 }
-table tr:nth-child(2n) {
-  background: #eee;
-}
-table th {
-  height: 40px;
+
+.item-card {
+  height: 160px;
   line-height: 40px;
-  padding: 4px 12px;
-  background: #ccc;
-  position: sticky;
-  top: 0;
-}
-table img {
-  width: 36px;
-  height: 36px;
-  border-radius: 100%;
-}
-table td {
-  height: 40px;
-  line-height: 40px;
-  padding: 4px 12px;
   text-align: center;
+  border-bottom: 1px solid #ededed;
+  display: flex;
+  align-items: center;
 }
-table input {
+
+.item-card .checkbox {
+  /* flex-basis: 4%; */
+}
+
+
+.checkbox input {
   width: 100px;
   outline: none;
   border: 1px solid #333;
   background-color: #fff;
   color: #000;
+
   border-radius: 4px;
   padding: 2px;
 }
-table input:focus {
-  border: 1px solid #3daa12;
-}
+
+
 .far {
   color: rgb(253, 63, 63);
   opacity: 0.8;
 }
+
 .far:hover {
   color: red;
   opacity: 1;
 }
+
 .cart-footer {
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
-  padding: 12px 24px;
-  border-top: 2px solid #ccc;
-}
-.payment-form {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.payment-form-content {
-  background: #fff;
   border-radius: 8px;
-}
-.form-content {
-  padding: 12px;
-  display: flex;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.form-content-info {
-  display: flex;
+  background: #fff;
+  height: 5rem;
+  align-items: center;
   justify-content: space-between;
 }
-.form-content .table {
-  /* max-height: 200px;
-  overflow: auto; */
-}
-.address-item {
-  display: flex;
-  gap: 24px;
-  justify-items: center;
-  margin: 12px 0;
-}
-.address-item i {
-  width: 30px;
-  line-height: 40px;
-}
-.address-item span {
-  width: 180px;
-  line-height: 40px;
-}
+
 .total-money {
   height: 40px;
   font-size: 16px;
   line-height: 40px;
   font-weight: 600;
 }
+
+.header-cart-item {
+  background-color: white;
+  margin-bottom: 10px;
+  display: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  display: flex;
+  padding-left: 28px;
+}
+
+.header-cart-item .checkbox-all-product {
+  flex-basis: 4%;
+}
+
+.header-cart-item>div {
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 18%;
+}
+
+.quantity input {
+  width: 24px;
+  height: 42px;
+  line-height: 1.65;
+  float: left;
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #eee;
+  background-color: #f9f9f9;
+}
+
+.numberQuantity {
+  width: 45px !important;
+  text-align: center;
+  background-color: #fff !important;
+  cursor: auto !important;
+}
+
+.quantity input:hover {
+  background-color: #bbb5b5;
+  cursor: pointer;
+}
+
+.quantity input:focus {
+  outline: 0;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #d0011b;
+  padding: 24px 12px;
+  display: flex;
+  column-gap: 3px;
+  padding-left: 1.4rem;
+  min-width: 80px;
+  width: 120px;
+}
+
+.disable {}
 </style>

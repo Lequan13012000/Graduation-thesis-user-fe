@@ -7,6 +7,7 @@ const storeData = {
   state: {
     customer: "",
     cart: 0,
+    payment:[]
   },
   getters: {
     user: (state) => state.customer,
@@ -22,6 +23,10 @@ const storeData = {
     CHANGE_CART(state, cart) {
       state.cart = cart;
     },
+    CHANGE_PAYMENT(state,payment){
+      state.payment = payment;
+
+    }
   },
 };
 const store = new Vuex.Store(storeData);

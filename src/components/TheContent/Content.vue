@@ -4,7 +4,7 @@
       class="flex flex-col main-content w-[1200px] m-auto relative min-h-[120px]"
     >
       <div class="list-category flex flex-row gap-x-2">
-        <NavBar @changeCategory="changeCategory"></NavBar>
+        <NavBar></NavBar>
         <carousel
           :per-page="1"
           :paginationEnabled="false"

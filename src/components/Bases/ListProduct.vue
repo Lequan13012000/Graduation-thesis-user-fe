@@ -269,10 +269,13 @@ export default {
 }
 .list-product {
   width: 100%;
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 16px;
 }
 .list-product-title {
   height: 40px;
-  border-bottom: 2px solid #333;
+  border-bottom: 1px solid #ccc;
   font-size: 16px;
   font-weight: 600;
 }

@@ -8,6 +8,7 @@ import SignIn from "@/components/TheContent/SignIn";
 import SignUp from "@/components/TheContent/SignUp";
 import AccountInfo from "@/components/TheContent/AccountInfo";
 import Cart from "@/components/TheContent/Cart";
+import Payment from "@/components/TheContent/Payment";
 import DetailView from "@/components/Bases/DetailView";
 import ProductByCategory from "@/components/Bases/ProductByCategory";
 import Search from "@/components/Bases/Search";
@@ -19,6 +20,7 @@ const routes = [
   { path: "/signup", component: SignUp },
   { path: "/infomation", component: AccountInfo },
   { path: "/cart", component: Cart },
+  { path: "/payment", component: Payment },
   { path: "/detail/:id", component: DetailView },
   { path: "/search", component: Search },
 ];

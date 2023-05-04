@@ -1,7 +1,7 @@
 .input {
     height: 40px;
     min-width: 200px;
-    border: 2px solid #7a2029;
+    border: 2px solid #ccc;
     border-radius: 4px;
     outline: none;
     padding-left: 16px;
@@ -12,7 +12,8 @@
 
 .input:focus
  {
-    border: 2px solid #ff8c00;
+    border: 2px solid #7a2029;
+
 }
 
 .input-error {
