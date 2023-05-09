@@ -229,7 +229,7 @@ export default {
                 .put(api.CartApi, cart)
                 .then((res) => {
                   if (res.status == 200) {
-                    this.mesage = "Thêm vào giỏ hàng thành công.";
+                    this.mesage = "Thêm vào giỏ hàng thành công!";
                     this.hasToast = true;
                     setTimeout(() => {
                       this.hasToast = false;
@@ -247,7 +247,7 @@ export default {
                 .post(api.CartApi, cart)
                 .then((res) => {
                   if (res.status == 201) {
-                    this.mesage = "Thêm vào giỏ hàng thành công.";
+                    this.mesage = "Thêm vào giỏ hàng thành công!";
                     this.hasToast = true;
                     setTimeout(() => {
                       this.hasToast = false;

@@ -64,10 +64,10 @@
 
       </div>
       <Loader v-if="hasLoader"></Loader>
-      <ErrorPopup @close="close" :title="title" v-if="hasError"></ErrorPopup>
-      <QuestionPopup :title="title" @close="close" @yes="yes" v-if="hasQuestion"></QuestionPopup>
-      <ToastMesage :mesage="title" @closeToast="closeToast" v-if="hasToast"></ToastMesage>
     </div>
+    <ErrorPopup @close="close" :title="title" v-if="hasError"></ErrorPopup>
+    <QuestionPopup :title="title" @close="close" @yes="yes" v-if="hasQuestion"></QuestionPopup>
+    <ToastMesage :mesage="title" @closeToast="closeToast" v-if="hasToast"></ToastMesage>
   </div>
 </template>
 <script>
@@ -139,13 +139,20 @@ export default {
       this.$store.commit("CHANGE_PAYMENT", this.listPayment);
     },
     selectAll() {
-      for (let i = 0; i < this.items.length; i++) {
-        this.items[i].checked = this.isSelectedAll;
-        if (this.isSelectedAll) {
-          this.listPayment.push(this.items[i]);
+      if (this.listPayment.length === this.items.length) {
+        this.isSelectedAll = false;
+        for (let i = 0; i < this.items.length; i++) {
+          this.items[i].checked = false;
         }
-        else {
-          this.listPayment = []
+        this.listPayment = [];
+      }
+      else {
+        this.isSelectedAll = true;
+        for (let i = 0; i < this.items.length; i++) {
+          if (this.items[i].checked === false) {
+            this.items[i].checked = true;
+            this.listPayment.push(this.items[i]);
+          }
         }
       }
       this.$store.commit("CHANGE_PAYMENT", this.listPayment);
@@ -161,19 +168,20 @@ export default {
         .then((res) => {
           this.items = res.data;
           if (this.getPayment.length) {
-            // this.items = this.items.map(item => {
-            //   const isHas = this.getPayment.find((payment) => payment.prod_id === item.prod_id);
-            //   if (isHas?.checked) {
-            //     return {
-            //       ...item, checked: true
-            //     }
-            //   }
-            //   else {
-            //     return {
-            //       ...item, checked: false
-            //     }
-            //   }
-            // })
+            this.listPayment = this.getPayment;
+            if (this.listPayment.length === this.items.length) {
+              this.isSelectedAll = true;
+            }
+            this.items = this.items.map(item => {
+              const found = this.listPayment.find(payment => payment.prod_id === item.prod_id);
+              if (found) {
+                return found;
+              }
+              else {
+                item.checked = false;
+                return item;
+              }
+            });
           }
           else {
             this.items = this.items.map(item => {
@@ -236,6 +244,15 @@ export default {
           setTimeout(() => {
             this.hasToast = false;
           }, 3000);
+          this.getCardPayment(this.selectedItem
+          );
+          // const isHas = this.listPayment.findIndex((payment) => payment.prod_id === this.selectedItem.prod_id);
+          // if (isHas !== -1) {
+          //   this.listPayment.splice(isHas, 1);
+          //   this.isSelectedAll = false;
+          //   this.$store.commit("CHANGE_PAYMENT", this.listPayment);
+          //   console.log(this.listPayment)
+          // }
           this.getCart();
         })
         .finally(() => (this.hasLoader = false));

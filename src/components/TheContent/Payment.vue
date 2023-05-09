@@ -232,7 +232,7 @@ export default {
                     }));
                     this.$axios.post(api.OrderDetailApi, od).then((res) => {
                         if (res.status == 201) {
-                            this.title = "Tạo đơn hàng thành công.";
+                            this.title = "Tạo đơn hàng thành công!";
                             this.hasToast = true;
                             setTimeout(() => {
                                 this.hasToast = false;

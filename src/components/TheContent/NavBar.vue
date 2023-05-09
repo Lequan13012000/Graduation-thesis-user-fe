@@ -1,9 +1,5 @@
 <template>
   <div class="navbar">
-    <!-- <div class="navbar__title">
-      <i class="fas fa-bars"></i>
-      <span style="font-size: 20px; font-weight: 500">DANH MỤC SẢN PHẨM</span>
-    </div> -->
     <div v-for="item in list" :key="item.id">
       <router-link
         :to="{
