@@ -17,8 +17,7 @@
                                     </div>
                                     <div>
                                         <input type="text" class="input" placeholder="Họ tên..." v-model="payMentInfo.name"
-                                            :class="{ 'input-error': !isName.isTrue }" @change="ValidateOrder"
-                                            :title="isName.title" />
+                                            @change="ValidateOrder" :title="isName.title" />
                                     </div>
                                 </div>
                                 <div class="flex items-center">
@@ -27,8 +26,7 @@
                                         <span>Số điện thoại:</span>
                                     </div>
                                     <div> <input type="text" class="input" placeholder="Số điện thoại..."
-                                            v-model="payMentInfo.tel" :class="{ 'input-error': !isTel.isTrue }"
-                                            @change="ValidateOrder" :title="isTel.title" /></div>
+                                            v-model="payMentInfo.tel" @change="ValidateOrder" :title="isTel.title" /></div>
                                     <div>
                                     </div>
                                 </div>
@@ -38,8 +36,7 @@
                                         <span>Địa chỉ nhận hàng:</span>
                                     </div>
                                     <input type="text" class="input" placeholder="Địa chỉ..." v-model="payMentInfo.address"
-                                        :class="{ 'input-error': !isAddress.isTrue }" @change="ValidateOrder"
-                                        :title="isAddress.title" />
+                                        @change="ValidateOrder" :title="isAddress.title" />
                                 </div>
                                 <div class="flex items-center">
                                     <div class="w-[12rem]">
@@ -106,19 +103,35 @@
                     </div>
                 </div>
             </div>
+            <Loader v-if="hasLoader"></Loader>
         </div>
+        <ErrorPopup @close="close" :title="title" v-if="hasError"></ErrorPopup>
+        <QuestionPopup :title="title" @close="close" @yes="yes" v-if="hasQuestion"></QuestionPopup>
+        <ToastMesage :mesage="title" @closeToast="closeToast" v-if="hasToast"></ToastMesage>
+
     </div>
 </template>
 
 <script>
 import api from "@/js/api";
+import ToastMesage from "@/components/Bases/ToastMesage";
+import Loader from "@/components/Bases/Loader";
+import QuestionPopup from "../Bases/BasePopup/QuestionPopup.vue";
+import ErrorPopup from "@/components/Bases/BasePopup/ErrorPopup";
 export default {
+    components: {
+        ToastMesage,
+        Loader,
+        QuestionPopup,
+        ErrorPopup
+    },
     data() {
         return {
             items: [],
             customer: {},
             hasError: false,
             hasToast: false,
+            hasLoader: false,
             title: "",
             payMentInfo: {
                 name: "",
@@ -220,7 +233,7 @@ export default {
                 await this.$axios.post(api.OrderApi, order).then((res) => {
                     addedOrder = res.status;
                 });
-                if (addedOrder == 201) {
+                if (addedOrder === 201) {
                     let orderId = await this.$axios
                         .get(`${api.OrderApi}/newOrder`)
                         .then((res) => res.data);
@@ -231,25 +244,33 @@ export default {
                         price: item.price,
                     }));
                     this.$axios.post(api.OrderDetailApi, od).then((res) => {
-                        if (res.status == 201) {
+                        if (res.status === 201) {
                             this.title = "Tạo đơn hàng thành công!";
                             this.hasToast = true;
                             setTimeout(() => {
                                 this.hasToast = false;
-                            }, 3000);
-                            this.deleteCard();
-                            this.$router.replace({ path: "/home" });
+                                this.deleteCard();
+                                this.$router.replace({ path: "/home" });
+                            }, 1500);
                         }
                     });
                 }
             }
         },
         deleteCard() {
-            this.$axios.delete(`${api.CartApi}/${this.customer.id}`).then((res) => {
-                if (res.status == 200) {
-                    this.$store.commit("CHANGE_CART", 0);
+            this.$axios.delete(`${api.CartApi}/${this.getCustomer.id}`).then((res) => {
+                if (res.status === 200) {
+                    this.$store.commit("CHANGE_CART", "");
+                    this.$store.commit("CHANGE_PAYMENT", []);
                 }
             });
+        },
+        closeToast() {
+            this.hasToast = false;
+        },
+        close() {
+            this.hasQuestion = false;
+            this.hasError = false;
         },
     }
 }

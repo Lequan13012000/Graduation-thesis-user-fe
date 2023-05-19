@@ -1,67 +1,45 @@
 <template>
-  <div class="list-product w-[1200px] m-auto relative flex">
-    <NavBar :idCategory="getIdCategory"></NavBar>
-    <div class="flex flex-col">
-      <div class="list-product-content">
-        <div class="category-description" v-if="description">
-          {{ description }}
+  <div class="bg-[#f5f5f5] rounded-lg py-6">
+    <div class="list-product w-[1200px] m-auto relative flex">
+      <NavBar :idCategory="getIdCategory"></NavBar>
+      <div class="flex flex-col">
+        <div class="list-product-content">
+          <div class="category-description" v-if="description">
+            {{ description }}
+          </div>
+          <div class="card" v-for="(item, index) in items" :key="index" :tabindex="activeIndex === index ? 0 : -1"
+            @keydown.up.prevent="focusPrevious(index)" @keydown.down.prevent="focusNext(index)"
+            @keydown.enter.prevent="selectItem(item)">
+            <router-link :to="'/detail/' + item.id">
+              <div
+                class="flex justify-center text-sm text-center uppercase items-center border-b border-dotted border-[#d8d8d8] h-14 p-3">
+                <span class="card-title">{{ item.name }}</span>
+              </div>
+              <div class="card-content">
+                <img class="h-[162px] w-[190px]" :src="item.image || avatar" alt="" />
+              </div>
+              <div class="card-footer">
+                <span>{{ item.price }}đ</span>
+                <i class="fas fa-cart-plus text-[#a11f2c]" @click.prevent="addCart(item)"></i>
+              </div>
+            </router-link>
+          </div>
         </div>
-        <div
-          class="card"
-          v-for="(item, index) in items"
-          :key="index"
-          :tabindex="activeIndex === index ? 0 : -1"
-          @keydown.up.prevent="focusPrevious(index)"
-          @keydown.down.prevent="focusNext(index)"
-          @keydown.enter.prevent="selectItem(item)"
-        >
-          <router-link :to="'/detail/' + item.id">
-            <div
-              class="flex justify-center text-sm text-center uppercase items-center border-b border-dotted border-[#d8d8d8] h-14 p-3"
-            >
-              <span class="card-title">{{ item.name }}</span>
-            </div>
-            <div class="card-content">
-              <img
-                class="h-[162px] w-[190px]"
-                :src="item.image || avatar"
-                alt=""
-              />
-            </div>
-            <div class="card-footer">
-              <span>{{ item.price }}đ</span>
-              <i
-                class="fas fa-cart-plus text-[#a11f2c]"
-                @click.prevent="addCart(item)"
-              ></i>
-            </div>
-          </router-link>
+        <div class="pagination" v-if="items.length">
+          <paginate :key="componentKey" :page-count="totalPage" :click-handler="clickCallback" :prev-text="'Trước'"
+            :next-text="'Sau'" :container-class="'pagination'" :page-class="'page-item'" :prev-class="'prev-item'"
+            :next-class="'next-item'" :page-link-class="'page-link-item'">
+          </paginate>
         </div>
       </div>
-      <div class="pagination">
-        <paginate
-          :key="componentKey"
-          :page-count="totalPage"
-          :click-handler="clickCallback"
-          :prev-text="'Trước'"
-          :next-text="'Sau'"
-          :container-class="'pagination'"
-          :page-class="'page-item'"
-          :prev-class="'prev-item'"
-          :next-class="'next-item'"
-          :page-link-class="'page-link-item'"
-        >
-        </paginate>
+      <div class="nodata ml-[15rem]" v-if="!items.length">
+        <img src="../../assets/image/empty.svg" alt="No image">
+        Không có sản phẩm để hiển thị.
       </div>
+      <ErrorPopup :title="mesage" @close="close" v-if="hasError"></ErrorPopup>
+      <Loader v-if="hasLoader"></Loader>
+      <ToastMesage v-if="hasToast" :mesage="mesage" @closeToast="closeToast"></ToastMesage>
     </div>
-
-    <ErrorPopup :title="mesage" @close="close" v-if="hasError"></ErrorPopup>
-    <Loader v-if="hasLoader"></Loader>
-    <ToastMesage
-      v-if="hasToast"
-      :mesage="mesage"
-      @closeToast="closeToast"
-    ></ToastMesage>
   </div>
 </template>
 <script>
@@ -242,21 +220,18 @@ export default {
 </script>
 <style scoped>
 .list-product {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
 }
-/* .list-product-title {
-    height: 60px;
-    border-bottom: 2px solid #333;
-    font-size: 32px;
-    font-weight: 600;
-    padding: 12px 48px;
-    color: #3daa12;
-  } */
+
 .list-product-content {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
   padding: 12px 48px;
 }
+
 .card {
   max-width: 200px;
   background: #fff;
@@ -264,28 +239,35 @@ export default {
   border-radius: 8px;
   z-index: 1;
 }
+
 .card:hover {
   cursor: pointer;
 }
+
 .card-content {
   overflow: hidden;
   margin: 6px;
 }
+
 .card-title {
   color: #000;
   font-weight: 500;
 }
+
 .card-title:hover {
   color: #a11f2c;
 }
+
 .product-image img {
   max-height: 100%;
   max-width: 100%;
   opacity: 0.8;
 }
+
 .product-image:hover img {
   opacity: 1;
 }
+
 .card-footer {
   display: flex;
   justify-content: space-between;
@@ -295,25 +277,43 @@ export default {
   height: 2.5rem;
   border-top: 1px dotted #d8d8d8;
 }
+
 .card-footer span {
   color: #a11f2c;
 }
+
 .pagination {
   display: flex;
   width: 100%;
   justify-content: center;
   column-gap: 16px;
 }
+
 ::v-deep .disabled {
   opacity: 0.3;
 }
+
 ::v-deep .page-item {
   padding: 0;
+  line-height: 24px;
 }
+
 ::v-deep .page-link-item {
   padding: 0 8px;
 }
+
 ::v-deep .active {
   background-color: orange;
+  border-radius: 50%;
+  color: #FFFFFF;
+  line-height: 24px;
+}
+
+::v-deep .prev-item {
+  line-height: 24px;
+}
+
+::v-deep .next-item {
+  line-height: 24px;
 }
 </style>

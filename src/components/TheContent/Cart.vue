@@ -196,6 +196,8 @@ export default {
             this.noData = false;
           }
           this.$store.commit("CHANGE_CART", this.items.length);
+          console.log('payment',this.listPayment);
+          console.log('items',this.items);
         })
         .finally(() => (this.hasLoader = false));
     },
@@ -244,15 +246,8 @@ export default {
           setTimeout(() => {
             this.hasToast = false;
           }, 3000);
-          this.getCardPayment(this.selectedItem
-          );
-          // const isHas = this.listPayment.findIndex((payment) => payment.prod_id === this.selectedItem.prod_id);
-          // if (isHas !== -1) {
-          //   this.listPayment.splice(isHas, 1);
-          //   this.isSelectedAll = false;
-          //   this.$store.commit("CHANGE_PAYMENT", this.listPayment);
-          //   console.log(this.listPayment)
-          // }
+          this.getCardPayment(this.selectedItem);
+          // this.$store.commit("CHANGE_PAYMENT", this.listPayment);
           this.getCart();
         })
         .finally(() => (this.hasLoader = false));

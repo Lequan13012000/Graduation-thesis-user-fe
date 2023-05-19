@@ -3,7 +3,7 @@
     <div class="banner text-white w-[1200px] m-auto relative min-h-[120px]">
       <router-link to="/home">
         <div class="logo" data-aos="zoom-in-right" data-aos-duration="1500">
-          <img class="w-[250px]" src="../../assets/image/logo.png" alt="" />
+          <img class="w-[200px]" src="../../assets/image/logo.png" alt="" />
         </div>
       </router-link>
 

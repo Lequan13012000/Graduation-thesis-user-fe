@@ -22,6 +22,9 @@ export default {
     TopNavBar,
     Footer,
   },
+  created() {
+    this.$store.commit("SAVE_CUSTOMER");
+  },
 };
 </script>
 <style>

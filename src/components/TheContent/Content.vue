@@ -49,7 +49,7 @@
             v-if="showListProduct && product.list.length"
             :data="product"
             :keyList="index"
-            class="mt-8"
+            class="my-8"
           ></ListProduct>
         </div>
       </div>
@@ -80,7 +80,6 @@ export default {
     };
   },
   created() {
-    this.$store.commit("SAVE_CUSTOMER");
     this.getData();
   },
   methods: {

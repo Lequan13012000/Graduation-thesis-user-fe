@@ -1,157 +1,107 @@
 <template>
-  <div class="product-detail w-[1200px] m-auto relative">
-    <div class="product-info flex pt-4">
-      <NavBar></NavBar>
-      <div class="product-info-main">
-        <div class="flex justify-between gap-6">
-          <div class="product-image">
-            <img
-              class="w-[300px] h-[300px]"
-              :src="item.image || avatar"
-              alt=""
-            />
-          </div>
-          <div class="product-property">
-            <div class="text-3xl font-bold mb-4">
-              {{ item.name }}
+  <div class="bg-[#f5f5f5] rounded-lg py-6">
+    <div class="product-detail w-[1200px] m-auto relative">
+      <div class="product-info flex p-6">
+        <NavBar></NavBar>
+        <div class="product-info-main">
+          <div class="flex justify-between gap-6">
+            <div class="product-image">
+              <img class="w-[300px] h-[300px]" :src="item.image || avatar" alt="" />
             </div>
-            <table class="table-detail">
-              <thead>
-                <tr>
-                  <th class="table-title">Mã sản phẩm</th>
-                  <th class="table-title">Xuất xứ</th>
-                  <th class="table-title">Đơn vị tính</th>
-                  <th class="table-title">Tình trạng</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{{ item.id }}</td>
-                  <td>{{ item.origin }}</td>
-                  <td>{{ item.unit }}</td>
-                  <td>{{ item.amount > 0 ? "Còn hàng" : "Hết hàng" }}</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="product-property">
+              <div class="text-3xl font-bold mb-4">
+                {{ item.name }}
+              </div>
+              <table class="table-detail">
+                <thead>
+                  <tr>
+                    <th class="table-title">Xuất xứ</th>
+                    <th class="table-title">Đơn vị tính</th>
+                    <th class="table-title">Tình trạng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ item.origin }}</td>
+                    <td>{{ item.unit }}</td>
+                    <td>{{ item.amount > 0 ? "Còn hàng" : "Hết hàng" }}</td>
+                  </tr>
+                </tbody>
+              </table>
 
-            <p class="price"><span>₫</span> {{ item.price }}</p>
-            <div
-              class="cart flex gap-6"
-              method="post"
-              enctype="multipart/form-data"
-            >
-              <div class="quantity">
-                <input type="button" value="-" @click="decQuantity" />
-                <input
-                  type="number"
-                  min="1"
-                  max="9999"
-                  name="quantity"
-                  v-model="quantity"
-                  class="numberQuantity"
-                />
-                <input type="button" value="+" @click="ascQuantity" />
+              <p class="price"><span>₫</span> {{ item.price }}</p>
+              <div class="cart flex gap-6" method="post" enctype="multipart/form-data">
+                <div class="quantity">
+                  <input type="button" value="-" @click="decQuantity" />
+                  <input type="number" min="1" max="9999" name="quantity" v-model="quantity" class="numberQuantity" />
+                  <input type="button" value="+" @click="ascQuantity" />
+                </div>
+                <button class="button" type="submit" name="add-to-cart" value="334" @click="addCart(item)">
+                  Thêm vào giỏ
+                </button>
               </div>
-              <button
-                class="button"
-                type="submit"
-                name="add-to-cart"
-                value="334"
-                @click="addCart(item)"
-              >
-                Thêm vào giỏ
-              </button>
-            </div>
 
-            <div class="mt-8">
-              <p>AN LỘC VIỆT CAM KẾT:</p>
-              <div class="store-title">
-                Cung cấp các sản phẩm văn phòng đa dạng với giá cả hợp lý
-              </div>
-              <div class="store-title">
-                Miễn phí giao hàng cho đơn hàng trên 500.000đ (áp dụng tại các
-                quận nội thành TP. Hà Nội)
-              </div>
-              <div class="store-title">
-                Hỗ trợ đổi trả nếu có lỗi sản phẩm hoặc không vừa ý
-              </div>
-              <div class="store-title">
-                Tư vấn và hướng dẫn sử dụng sản phẩm chi tiết, tận tình
-              </div>
-              <div class="store-title">
-                Cam kết chất lượng sản phẩm đúng với mô tả
+              <div class="mt-8">
+                <p>AN LỘC VIỆT CAM KẾT:</p>
+                <div class="store-title">
+                  Cung cấp các sản phẩm văn phòng đa dạng với giá cả hợp lý
+                </div>
+                <div class="store-title">
+                  Miễn phí giao hàng cho đơn hàng trên 500.000đ (áp dụng tại các
+                  quận nội thành TP. Hà Nội)
+                </div>
+                <div class="store-title">
+                  Hỗ trợ đổi trả nếu có lỗi sản phẩm hoặc không vừa ý
+                </div>
+                <div class="store-title">
+                  Tư vấn và hướng dẫn sử dụng sản phẩm chi tiết, tận tình
+                </div>
+                <div class="store-title">
+                  Cam kết chất lượng sản phẩm đúng với mô tả
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="product-info">
-      <div class="title">Mô tả</div>
-      <div
-        class="main-description"
-        :class="{ 'collapse-description': isCollapse }"
-        v-html="item.description"
-      ></div>
-      <div class="flex justify-center container-collapse">
-        <div @click="collapseDes" class="button-collapse">
-          <p v-if="isCollapse">Xem thêm</p>
-          <p class="collapseSecond" v-else>Thu gọn</p>
+      <div class="product-info p-6">
+        <div class="title">Mô tả</div>
+        <div class="main-description" :class="{ 'collapse-description': isCollapse }" v-html="item.description"></div>
+        <div class="flex justify-center container-collapse  pb-5">
+          <div @click="collapseDes" class="button-collapse">
+            <p v-if="isCollapse">Xem thêm</p>
+            <p class="collapseSecond" v-else>Thu gọn</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="">
-      <div class="title">Sản phẩm tương tự</div>
-      <div class="mt-8">
-        <Carousel
-          class="grabbable"
-          :per-page="5"
-          :paginationEnabled="true"
-          paginationActiveColor="#a11f2c"
-          :loop="true"
-          :speed="500"
-          :autoplay="true"
-          :autoplayTimeout="5000"
-          :navigationEnabled="true"
-        >
-          <slide v-for="(product, index) in listProduct" :key="index">
-            <div
-              class="card"
-              v-on:mousedown="onDragStart($event)"
-              v-on:mouseup="onDragEnd($event)"
-              @click="viewDetail(product.id)"
-            >
-              <div
-                class="flex justify-center text-sm text-center uppercase items-center border-b border-dotted border-[#d8d8d8] h-14 p-3"
-              >
-                <span class="card-title">{{ product.name }}</span>
+      <div class="product-info p-6">
+        <div class="title">Sản phẩm tương tự</div>
+        <div class="mt-8">
+          <Carousel class="grabbable" :per-page="5" :paginationEnabled="true" paginationActiveColor="#a11f2c" :loop="true"
+            :speed="500" :autoplay="true" :autoplayTimeout="5000" :navigationEnabled="true">
+            <slide v-for="(product, index) in listProduct" :key="index">
+              <div class="card" v-on:mousedown="onDragStart($event)" v-on:mouseup="onDragEnd($event)"
+                @click="viewDetail(product.id)">
+                <div
+                  class="flex justify-center text-sm text-center uppercase items-center border-b border-dotted border-[#d8d8d8] h-14 p-3">
+                  <span class="card-title">{{ product.name }}</span>
+                </div>
+                <div class="card-content">
+                  <img class="h-[162px] w-[190px]" :src="product.image || avatar" alt="" />
+                </div>
+                <div class="card-footer">
+                  <span>{{ product.price }}đ</span>
+                  <i class="fas fa-cart-plus text-[#a11f2c]" @click.prevent="addCart(product)"></i>
+                </div>
               </div>
-              <div class="card-content">
-                <img
-                  class="h-[162px] w-[190px]"
-                  :src="product.image || avatar"
-                  alt=""
-                />
-              </div>
-              <div class="card-footer">
-                <span>{{ product.price }}đ</span>
-                <i
-                  class="fas fa-cart-plus text-[#a11f2c]"
-                  @click.prevent="addCart(product)"
-                ></i>
-              </div>
-            </div>
-          </slide>
-        </Carousel>
+            </slide>
+          </Carousel>
+        </div>
       </div>
+      <ErrorPopup :title="mesage" @close="close" v-if="hasError"></ErrorPopup>
+      <Loader v-if="hasLoader"></Loader>
+      <ToastMesage v-if="hasToast" :mesage="mesage" @closeToast="close"></ToastMesage>
     </div>
-    <ErrorPopup :title="mesage" @close="close" v-if="hasError"></ErrorPopup>
-    <Loader v-if="hasLoader"></Loader>
-    <ToastMesage
-      v-if="hasToast"
-      :mesage="mesage"
-      @closeToast="close"
-    ></ToastMesage>
   </div>
 </template>
 <script>
@@ -322,6 +272,7 @@ export default {
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
 }
+
 ::v-deep .VueCarousel-navigation-prev[data-v-453ad8cd] {
   left: 35px;
   color: #fff;
@@ -336,11 +287,13 @@ export default {
   outline: none;
   opacity: 0;
 }
+
 ::v-deep .VueCarousel-navigation-prev[data-v-453ad8cd]:hover {
   color: #a11f2c;
   border: 1px solid #a11f2c;
   opacity: 1;
 }
+
 ::v-deep .VueCarousel-navigation-next[data-v-453ad8cd] {
   right: 38px;
   color: #fff;
@@ -354,19 +307,22 @@ export default {
   justify-content: center;
   outline: none;
 }
+
 ::v-deep .VueCarousel-navigation-next[data-v-453ad8cd]:hover {
   color: #a11f2c;
   border: 1px solid #a11f2c;
 }
+
 .title {
-  border-bottom: 2px solid #ccc;
+  border-bottom: 1px solid #ccc;
   height: 50px;
-  padding: 0 24px;
+  padding: 0 24px 0 0;
   font-size: 16px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   font-weight: 600;
 }
+
 .product-detail {
   display: flex;
   flex-direction: column;
@@ -379,20 +335,24 @@ export default {
   border-radius: 8px;
   margin-bottom: 24px;
 }
+
 .product-info-main {
   padding-left: 24px;
   justify-content: space-between;
 }
+
 .main-description {
-  padding: 12px 24px;
+  padding: 12px 24px 0 0;
 }
 
 .product-image img {
   width: 100%;
 }
+
 .table-detail {
   border-collapse: collapse;
 }
+
 .table-detail th,
 td {
   border: 1px solid #ccc;
@@ -400,12 +360,15 @@ td {
   padding: 8px 12px;
   text-align: start;
 }
+
 .table-title {
   font-weight: 600;
 }
+
 .store-title {
   margin: 12px 0;
 }
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -428,12 +391,14 @@ input[type="number"] {
   border: 1px solid #eee;
   background-color: #f9f9f9;
 }
+
 .numberQuantity {
   width: 45px !important;
   text-align: center;
   background-color: #fff !important;
   cursor: auto !important;
 }
+
 .quantity input:hover {
   background-color: #bbb5b5;
   cursor: pointer;
@@ -442,6 +407,7 @@ input[type="number"] {
 .quantity input:focus {
   outline: 0;
 }
+
 .button {
   height: 40px;
   min-width: 100px;
@@ -460,6 +426,7 @@ input[type="number"] {
   border: 1px solid #f20759;
   background-color: #f20759;
 }
+
 .price {
   font-size: 20px;
   font-weight: 600;
@@ -476,28 +443,35 @@ input[type="number"] {
   border-radius: 8px;
   z-index: 1;
 }
+
 .card:hover {
   cursor: pointer;
 }
+
 .card-content {
   overflow: hidden;
   margin: 6px;
 }
+
 .card-title {
   color: #000;
   font-weight: 500;
 }
+
 .card-title:hover {
   color: #a11f2c;
 }
+
 .product-image img {
   max-height: 100%;
   max-width: 100%;
   opacity: 0.8;
 }
+
 .product-image:hover img {
   opacity: 1;
 }
+
 .card-footer {
   display: flex;
   justify-content: space-between;
@@ -507,13 +481,16 @@ input[type="number"] {
   height: 2.5rem;
   border-top: 1px dotted #d8d8d8;
 }
+
 .card-footer span {
   color: #a11f2c;
 }
+
 .collapse-description {
   height: 300px;
   overflow: hidden;
 }
+
 .button-collapse {
   width: 110px;
   text-align: center;
@@ -521,6 +498,7 @@ input[type="number"] {
   border: 1px solid orange;
   cursor: pointer;
 }
+
 .button-collapse p:after {
   content: "";
   width: 0;
@@ -532,17 +510,19 @@ input[type="number"] {
   vertical-align: middle;
   margin-left: 6px;
 }
+
 .collapseSecond:after {
   transform: rotate(180deg);
 }
+
 .container-collapse:before {
-    height: 55px;
-    margin-top: -45px;
-    content: "";
-    background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
-    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
-    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff00', endColorstr='#ffffff',GradientType=0 );
-    display: block;
+  height: 55px;
+  margin-top: -45px;
+  content: "";
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff00', endColorstr='#ffffff', GradientType=0);
+  display: block;
 }
 </style>

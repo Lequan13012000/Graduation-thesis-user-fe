@@ -71,7 +71,7 @@ export default {
                 })
             }
             else {
-                this.title = "Vui lòng nhập Email và mật khẩu."
+                this.title = "Vui lòng nhập Email và Mật Khẩu."
                 this.hasError = true;
             }
         },
